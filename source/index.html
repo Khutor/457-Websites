@@ -1,4 +1,8 @@
-﻿<!doctype html>
+﻿<?php
+    session_start();
+?>
+
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -6,9 +10,11 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../../../favicon.ico">
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-
     <title>Starter Template for Bootstrap</title>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -19,12 +25,14 @@
 
   <body>
 
-    <div id="nav"></div>
+    <div id="nav-div"></div>
     <script>
         $(function(){
-            $("#nav").load("nav.html");
+            $("#nav-div").load("nav.html");
         });
     </script>
+
+
     
     <main role="main" class="container">
 
@@ -36,11 +44,11 @@
       
      <div id="test2" class="starter-template">
         <h1>Bootstrap starter template</h1>
-        <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+        <p class="lead">YEp</p>
       </div>
 
                <?php
-           $dog = true;
+           $dog = false;
            if($dog == true) {
             ?>
             <script type="text/javascript">$('#test1').show()</script>
@@ -60,9 +68,9 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
     <script src="../../assets/js/vendor/popper.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
+
   </body>
 </html>
