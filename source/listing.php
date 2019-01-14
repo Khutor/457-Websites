@@ -10,45 +10,57 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../../../favicon.ico">
-
     <title>Starter Template for Bootstrap</title>
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="css/login.css" rel="stylesheet">
+    <link href="css/starter-template.css" rel="stylesheet">
   </head>
 
   <body>
 
-     <div id="nav-div"></div>
-
+    <div id="nav-div"></div>
+    
     <main role="main" class="container">
 
-        <form class="form-signin">
-
-          <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-          <label for="inputUName" class="sr-only">Email address</label>
-          <input type="text" id="inputUName" class="form-control" placeholder="Username" required autofocus>
-          <label for="inputPassword" class="sr-only">Password</label>
-          <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-          <div class="checkbox mb-3">
-            <label>
-              <input type="checkbox" value="remember-me"> Remember me
-            </label>
-          </div>
-          <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-          <p class="mt-5 mb-3">Don't have an account? Register <a href="register.html">here</a></p>
-          <p class="mt-5 mb-3 text-muted">&copy; 2019</p>
-
-        </form>
+        <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">ISBN</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Mark</td>
+                  <td>Otto</td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td>Jacob</td>
+                  <td>Thornton</td>
+                </tr>
+                <tr>
+                  <th scope="row">3</th>
+                  <td>Ye</td>
+                  <td>Ye</td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+    
 
     </main><!-- /.container -->
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>

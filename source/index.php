@@ -11,10 +11,8 @@
     <meta name="author" content="">
     <link rel="icon" href="../../../../favicon.ico">
     <title>Starter Template for Bootstrap</title>
-
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
+
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -26,13 +24,6 @@
   <body>
 
     <div id="nav-div"></div>
-    <script>
-        $(function(){
-            $("#nav-div").load("nav.html");
-        });
-    </script>
-
-
     
     <main role="main" class="container">
 
@@ -47,21 +38,21 @@
         <p class="lead">YEp</p>
       </div>
 
-               <?php
-           $dog = false;
-           if($dog == true) {
-            ?>
-            <script type="text/javascript">$('#test1').show()</script>
-            <script type="text/javascript">$('#test2').hide()</script>
-            <?php
+        <?php
+            $dog = false;
+            if($dog == true) {
+        ?>
+        <script type="text/javascript">$('#test1').show()</script>
+        <script type="text/javascript">$('#test2').hide()</script>
+        <?php
             }
             else {
-            ?>
-            <script type="text/javascript">$('#test1').hide()</script>
-            <script type="text/javascript">$('#test2').show()</script>
-            <?php
-                }
-             ?>
+        ?>
+        <script type="text/javascript">$('#test1').hide()</script>
+        <script type="text/javascript">$('#test2').show()</script>
+        <?php
+            }
+        ?>
 
     </main><!-- /.container -->
 
@@ -70,7 +61,13 @@
     <!-- Placed at the end of the document so the pages load faster -->
 
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-    <script src="../../assets/js/vendor/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+
+    <script>
+        $(function(){
+            $("#nav-div").load("nav.html");
+        });
+    </script>
 
   </body>
 </html>
