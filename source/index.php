@@ -1,5 +1,7 @@
 ﻿<?php
-    session_start();
+    if(!isset($_SESSION)) { 
+        session_start(); 
+    }
 ?>
 
 <!doctype html>
@@ -10,7 +12,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../../../favicon.ico">
-    <title>Starter Template for Bootstrap</title>
+    <title>Index</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 
@@ -30,17 +32,19 @@
 
       <div id="test1" class="starter-template">
         <h1>Bootstrap starter template</h1>
-        <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+        <p class="lead"> no </p>
       </div>
       
      <div id="test2" class="starter-template">
-        <h1>Bootstrap starter template</h1>
-        <p class="lead">YEp</p>
+        <h1>Bootstrap starter template2</h1>
+        <p class="lead"> yes </p>
       </div>
 
         <?php
-            $dog = false;
-            if($dog == true) {
+            $isAdmin = $_SESSION['isAdmin'] ? true : false;
+            $name = $_SESSION['login_user'];
+            $id = $_SESSION['userID'];
+            if($isAdmin == 1) {
         ?>
         <script type="text/javascript">$('#test1').show()</script>
         <script type="text/javascript">$('#test2').hide()</script>
@@ -53,6 +57,12 @@
         <?php
             }
         ?>
+
+        <h2> <?php echo $isAdmin ?> </h2>
+        <h2> <?php echo $name ?> </h2>
+        <h2> <?php echo $id ?> </h2>
+        <h2><a href = "logout.php">Sign Out</a></h2>
+
 
     </main><!-- /.container -->
 
