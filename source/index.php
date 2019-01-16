@@ -1,6 +1,7 @@
 ﻿<?php
     if(!isset($_SESSION)) { 
-        session_start(); 
+        session_start();
+        $_SESSION['logged'] = "false";
     }
 ?>
 
@@ -75,7 +76,7 @@
 
     <script>
         $(function(){
-            $("#nav-div").load("nav.html");
+            $("#nav-div").load("nav.php");
         });
     </script>
 

@@ -2,18 +2,16 @@
     if(!isset($_SESSION)) { 
         session_start(); 
     }
-
     include("config.php");
     $msg = '';
     if($_SERVER["REQUEST_METHOD"] == "POST") {      
-        $uName = mysqli_real_escape_string($db,$_POST['inputUName']);
-        $uPW = mysqli_real_escape_string($db,$_POST['inputPassword']); 
+        $uName = $_POST['inputUName'];
+        $uPW = $_POST['inputPassword']; 
         $sql = "SELECT userID, userIsAdmin FROM users WHERE userName = '$uName' and userPW = '$uPW'";
-        $result = mysqli_query($db,$sql);
-        $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-        $active = $row['active'];
+        $result = mysql_query($sql);
+        $row = mysql_fetch_array($result);
       
-        $count = mysqli_num_rows($result);
+        $count = mysql_num_rows($result);
       
         // If result matched $myusername and $mypassword, table row must be 1 row
 		
@@ -21,9 +19,10 @@
             $_SESSION['login_user'] = $uName;
             $_SESSION['userID'] = $row['userID'];
             $_SESSION['isAdmin'] = $row['userIsAdmin'];
+            $_SESSION['logged'] = "true";
             header("location: index.php");
         }else {
-            $msg = "Your Login Name or Password is invalid";
+            $msg = "Your login is invalid";
         }
     }
 ?>
@@ -84,7 +83,7 @@
 
         <script>
             $(function(){
-                $("#nav-div").load("nav.html");
+                $("#nav-div").load("nav.php");
             });
         </script>
 
