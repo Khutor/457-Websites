@@ -1,5 +1,8 @@
 <?php
-    if(empty($_SESSION['logged'])) {
+    if(!isset($_SESSION)) { 
+        session_start(); 
+    }
+    if($_SESSION['logged'] != "true") {
 ?> 
 
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
@@ -11,7 +14,7 @@
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="index.php">Home</a>
+            <a class="nav-link" href="index.php">Home <?php echo $_SESSION['logged'] ?></a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="login.php">Login</a>

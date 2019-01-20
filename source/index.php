@@ -62,8 +62,6 @@
         <h2> <?php echo $name ?> </h2>
         <h2> <?php echo $id ?> </h2>
         <h2> <?php echo $_SESSION['logged'] ?> </h2>
-        <h2><a href = "logout.php">Sign Out</a></h2>
-
 
     </main><!-- /.container -->
 
@@ -74,9 +72,11 @@
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
     <script src="~/js/bootstrap.min.js"></script>
 
-    <?php
-        include("navphp.php");
-    ?>
+    <script>
+        $(function(){
+            $("#nav-div").load("nav.php");
+        });
+    </script>
 
   </body>
 </html>
