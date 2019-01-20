@@ -1,7 +1,6 @@
 ﻿<?php
     if(!isset($_SESSION)) { 
         session_start();
-        $_SESSION['logged'] = "false";
     }
 ?>
 
@@ -42,7 +41,7 @@
       </div>
 
         <?php
-            $isAdmin = $_SESSION['isAdmin'] ? true : false;
+            $isAdmin = $_SESSION['isAdmin'];
             $name = $_SESSION['login_user'];
             $id = $_SESSION['userID'];
             if($isAdmin == 1) {
@@ -62,6 +61,7 @@
         <h2> <?php echo $isAdmin ?> </h2>
         <h2> <?php echo $name ?> </h2>
         <h2> <?php echo $id ?> </h2>
+        <h2> <?php echo $_SESSION['logged'] ?> </h2>
         <h2><a href = "logout.php">Sign Out</a></h2>
 
 
@@ -72,13 +72,11 @@
     <!-- Placed at the end of the document so the pages load faster -->
 
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-    <script src="/js/bootstrap.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
 
-    <script>
-        $(function(){
-            $("#nav-div").load("nav.php");
-        });
-    </script>
+    <?php
+        include("navphp.php");
+    ?>
 
   </body>
 </html>

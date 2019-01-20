@@ -1,5 +1,5 @@
 <?php
-    if($_SESSION['logged'] == "false") {
+    if(empty($_SESSION['logged'])) {
 ?> 
 
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
