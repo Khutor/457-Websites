@@ -24,14 +24,7 @@
   </head>
 
   <body>
-        <div id="nav-div"></div>
-
-    <?php
-        if($_SERVER["REQUEST_METHOD"] == "POST") {
-            header("location: listing.php?search+result");
-
-        }
-    ?>
+    <div id="nav-div"></div>
     
     <main role="main" class="container">
 
