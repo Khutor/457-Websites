@@ -67,7 +67,7 @@
 
     <script>
         $(function(){
-            $("#nav-div").load("nav.html");
+            $("#nav-div").load("nav.php");
         });
     </script>
 

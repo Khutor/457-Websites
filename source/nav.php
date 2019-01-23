@@ -20,8 +20,8 @@
             <a class="nav-link" href="login.php">Login</a>
           </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+        <form class="form-inline my-2 my-lg-0" method="post">
+          <input class="form-control mr-sm-2" type="text" placeholder="Search"  aria-label="Search">
           <button class="btn btn-sm btn-primary" type="submit">Search</button>
         </form>
       </div>
@@ -49,8 +49,8 @@
             <a class="nav-link" href="logout.php">Logout</a>
           </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+        <form class="form-inline my-2 my-lg-0" method="post">
+          <input class="form-control mr-sm-2" type="text" id="search2" placeholder="Search" aria-label="Search">
           <button class="btn btn-sm btn-primary" type="submit">Search</button>
         </form>
       </div>
@@ -58,4 +58,5 @@
 
 <?php
     }
+
 ?>

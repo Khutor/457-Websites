@@ -24,11 +24,16 @@
   </head>
 
   <body>
+        <div id="nav-div"></div>
 
-    <div id="nav-div"></div>
+    <?php
+        if($_SERVER["REQUEST_METHOD"] == "POST") {
+            header("location: listing.php?search+result");
+
+        }
+    ?>
     
     <main role="main" class="container">
-
 
       <div id="test1" class="starter-template">
         <h1>Bootstrap starter template</h1>
@@ -44,7 +49,8 @@
             $isAdmin = $_SESSION['isAdmin'];
             $name = $_SESSION['login_user'];
             $id = $_SESSION['userID'];
-            if($isAdmin == 1) {
+            $log = $_SESSION['logged'];
+            if($log == "true") {
         ?>
         <script type="text/javascript">$('#test1').show()</script>
         <script type="text/javascript">$('#test2').hide()</script>
@@ -62,6 +68,7 @@
         <h2> <?php echo $name ?> </h2>
         <h2> <?php echo $id ?> </h2>
         <h2> <?php echo $_SESSION['logged'] ?> </h2>
+         
 
     </main><!-- /.container -->
 
