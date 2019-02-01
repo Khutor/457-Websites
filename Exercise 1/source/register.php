@@ -7,20 +7,11 @@
     if($_SERVER["REQUEST_METHOD"] == "POST") {      
         $uName = $_POST['inputUName'];
         $uPW = $_POST['inputPassword']; 
-        $sql = "SELECT userID, userIsAdmin FROM users WHERE userName = '$uName' and userPW = '$uPW'";
-        $result = mysql_query($sql);
-        $row = mysql_fetch_array($result);
-      
-        $count = mysql_num_rows($result);
-      
-        // If result matched $myusername and $mypassword, table row must be 1 row
+        $sql = "INSERT INTO users(userName, userPW, userSpent, userIsAdmin) VALUES('$uName', '$uPW', 0, 0)";
+        //$result = mysql_query($sql);
 		
-        if($count == 1) {
-            $_SESSION['login_user'] = $uName;
-            $_SESSION['userID'] = $row['userID'];
-            $_SESSION['isAdmin'] = $row['userIsAdmin'];
-            $_SESSION['logged'] = "true";
-            header("location: index.php");
+        if(mysql_query($sql)) {
+            header("location: login.php");
         }else {
             $msg = "*Your login is invalid*";
         }
@@ -36,7 +27,7 @@
         <meta name="author" content="">
         <link rel="icon" href="../../../../favicon.ico">
 
-        <title>Login</title>
+        <title>Register</title>
 
         <!-- Bootstrap core CSS -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -53,19 +44,12 @@
 
             <form class="form-signin" method="post">
 
-              <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-              <h2 class="h5 mb-3 font-weight-normal"> <?php echo $msg; ?> </h2>
+              <h1 class="h3 mb-3 font-weight-normal">Enter Your Details</h1>
               <label for="inputUName" class="sr-only">Username</label>
               <input type="text" id="inputUName" name="inputUName" class="form-control" placeholder="Username" required autofocus>
               <label for="inputPassword" class="sr-only">Password</label>
               <input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Password" required>
-              <div class="checkbox mb-3">
-                <label>
-                  <input type="checkbox" value="remember-me"> Remember me
-                </label>
-              </div>
-              <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-              <p class="mt-5 mb-3">Don't have an account? Register <a href="register.php">here</a></p>
+              <button class="btn btn-lg btn-primary btn-block" type="submit">Register Account</button>
               <p class="mt-5 mb-3 text-muted">&copy; 2019</p>
 
             </form>
@@ -77,9 +61,8 @@
         <!-- Bootstrap core JavaScript
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
-        <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="/js/bootstrap.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
 
         <script>
             $(function(){
