@@ -3,6 +3,12 @@
         session_start(); 
     }
 
+	if (!isset($_SESSION['cart'])) {
+		$_SESSION['cart'] = array();
+		$_SESSION['cart2'] = array();
+
+	}
+
 	include("config.php");
 
 	if(!empty($_GET['search'])) {
@@ -11,8 +17,26 @@
 		$search = " ";
 	}
 
-	$sql = "SELECT * FROM books WHERE bookTitle LIKE '%$search%' OR bookISBN LIKE '%$search%'";
+	$search_kws = str_replace(' ', '%', $search);
+
+	$sql = "SELECT * FROM books WHERE bookTitle LIKE '%$search%' OR bookISBN LIKE '%$search_kws%'";
 	$result = mysql_query($sql);
+
+    if($_SERVER["REQUEST_METHOD"] == "POST") {   
+		$bookid = $_POST['selected_books'];
+		$amnt = $_POST['quantity'];
+
+		//$_SESSION['cart'] = $bookid;
+		$int = 0;
+		$keys = array_keys($amnt);
+		$array = [$n => $amnt[$keys[$int]]];
+		foreach( $bookid as $key => $n ) {
+			$array = [$n => $amnt[$keys[$int]]];
+			array_push($_SESSION['cart'], $array);
+			$int++;
+		}
+
+	}
 
 ?>
 
@@ -38,37 +62,42 @@
     <div id="nav-div"></div>
     
     <main role="main" class="container">
-
-        <div class="table-responsive">
-			<?php
-				
-				echo"
-					<table class='table table-hover'>
-						<thead>
-							<tr>
-								<th scope='col'>Order</th>
-								<th scope='col'>Quantity</th>
-								<th scope='col'>Title</th>
-								<th scope='col'>Price</th>
-							</tr>
-						</thead>
-						<tbody>
-				";
-				while($row = mysql_fetch_array($result)) {
-						echo "<tr>";
-								echo "<td> <input type='checkbox' name='selected_books[]' value='" . $row['bookID'] . "'/></td>";
-								echo "<td> <input type='number' name='quantity[" . $row['bookID'] . "][name]' value='' style='width: 50px;' /></td>"; 
-								echo "<td> <a href=details.php?id=" . $row['bookID'] . ">" . $row['bookTitle'] . "</a></td>";
-								echo "<td>$" .  $row['bookCost'] . "</td>";
-						echo "</tr>";
-				}
-				echo "	</tbody>
-					</table>";
-				
-			?>
-        </div>
-    
-
+		<form method="post">
+			<div class="table-responsive">
+				<?php
+					echo"
+						<table class='table table-hover'>
+							<thead>
+								<tr>
+									<th scope='col'>Order</th>
+									<th scope='col'>Quantity</th>
+									<th scope='col'>Title</th>
+									<th scope='col'>Price</th>
+								</tr>
+							</thead>
+							<tbody>
+					";
+					while($row = mysql_fetch_array($result)) {
+							echo "<tr>";
+									echo "<td> <input type='checkbox' name='selected_books[]' value='" . $row['bookID'] . "'/></td>";
+									echo "<td> <input type='number' min='0' value='0' name='quantity[]' style='width: 30px;' /></td>"; 
+									echo "<td> <a href=details.php?id=" . $row['bookID'] . ">" . $row['bookTitle'] . "</a></td>";
+									echo "<td>$" .  $row['bookCost'] . "</td>";
+							echo "</tr>";
+					}
+					echo "	</tbody>
+						</table>";
+				?>
+			</div>
+			<div style="text-align: center;">
+					<button class="btn btn-sm btn-primary" type="submit">Add Selected to Cart</button>
+				<?php 
+					echo '<pre>';
+					var_dump($_SESSION['cart']);
+					echo '</pre>';
+				?>
+			</div>
+		</form>    
     </main><!-- /.container -->
 
     <!-- Bootstrap core JavaScript
