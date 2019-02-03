@@ -5,37 +5,35 @@
 
 	if (!isset($_SESSION['cart'])) {
 		$_SESSION['cart'] = array();
-		$_SESSION['cart2'] = array();
-
 	}
 
 	include("config.php");
 
+    $search_kws = "";
 	if(!empty($_GET['search'])) {
-		$search = $_GET['search']; 
+		$search = $_GET['search'];
+        $search_kws = explode(" ", $search); 
 	} else {
 		$search = " ";
 	}
 
-	$search_kws = str_replace(' ', '%', $search);
+    //TODO - subject search
+	$sql = "SELECT * FROM books WHERE bookTitle LIKE '%$search%' OR bookISBN LIKE '%$search%'";
+    foreach($search_kws as $kw) {
+        $sql .= "OR bookTitle LIKE '%$kw%'";
+    }
 
-	$sql = "SELECT * FROM books WHERE bookTitle LIKE '%$search%' OR bookISBN LIKE '%$search_kws%'";
 	$result = mysql_query($sql);
-
     if($_SERVER["REQUEST_METHOD"] == "POST") {   
-		$bookid = $_POST['selected_books'];
-		$amnt = $_POST['quantity'];
+		$books = $_POST['selected_books'];
+		$quantity = $_POST['quantity'];
 
-		//$_SESSION['cart'] = $bookid;
-		$int = 0;
-		$keys = array_keys($amnt);
-		$array = [$n => $amnt[$keys[$int]]];
-		foreach( $bookid as $key => $n ) {
-			$array = [$n => $amnt[$keys[$int]]];
-			array_push($_SESSION['cart'], $array);
-			$int++;
-		}
-
+        //TODO - allow cart to be updated instead of overwritten
+        foreach($quantity as $key => $v) {
+            if(strpos($v, '0') !== false)
+                unset($quantity[$key]);
+        }
+        $_SESSION['cart'] = array_combine($books, $$quantity);
 	}
 
 ?>
@@ -93,7 +91,7 @@
 					<button class="btn btn-sm btn-primary" type="submit">Add Selected to Cart</button>
 				<?php 
 					echo '<pre>';
-					var_dump($_SESSION['cart']);
+					print_r($_SESSION['cart']);
 					echo '</pre>';
 				?>
 			</div>

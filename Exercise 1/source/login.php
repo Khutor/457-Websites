@@ -3,6 +3,7 @@
         session_start(); 
     }
     include("config.php");
+
     $msg = '';
     if($_SERVER["REQUEST_METHOD"] == "POST") {      
         $uName = $_POST['inputUName'];
@@ -13,8 +14,6 @@
       
         $count = mysql_num_rows($result);
       
-        // If result matched $myusername and $mypassword, table row must be 1 row
-		
         if($count == 1) {
             $_SESSION['login_user'] = $uName;
             $_SESSION['userID'] = $row['userID'];
