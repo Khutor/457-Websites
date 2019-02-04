@@ -28,12 +28,16 @@
 		$books = $_POST['selected_books'];
 		$quantity = $_POST['quantity'];
 
-        //TODO - allow cart to be updated instead of overwritten
         foreach($quantity as $key => $v) {
             if(strpos($v, '0') !== false)
                 unset($quantity[$key]);
         }
-        $_SESSION['cart'] = array_combine($books, $$quantity);
+
+        if(empty($_SESSION['cart'])) {
+            $_SESSION['cart'] = array_combine($books, $quantity);
+        } else {
+            $_SESSION['cart'] = array_combine($books, $quantity) + $_SESSION['cart'];
+        }
 	}
 
 ?>
@@ -53,6 +57,7 @@
 
     <!-- Custom styles for this template -->
     <link href="css/starter-template.css" rel="stylesheet">
+    <link href="css/nav.css" rel="stylesheet">
   </head>
 
   <body>

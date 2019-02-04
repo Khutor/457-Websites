@@ -1,4 +1,4 @@
-﻿<?php
+<?php
     if(!isset($_SESSION)) { 
         session_start();
     }
@@ -21,6 +21,7 @@
 
     <!-- Custom styles for this template -->
     <link href="css/starter-template.css" rel="stylesheet">
+    <link href="css/nav.css" rel="stylesheet">
   </head>
 
   <body>
