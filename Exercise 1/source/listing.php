@@ -9,18 +9,19 @@
 
 	include("config.php");
 
-    $search_kws = "";
 	if(!empty($_GET['search'])) {
 		$search = $_GET['search'];
         $search_kws = explode(" ", $search); 
 	} else {
 		$search = " ";
+		$search_kws = "";
 	}
 
-    //TODO - subject search
 	$sql = "SELECT * FROM books WHERE bookTitle LIKE '%$search%' OR bookISBN LIKE '%$search%'";
     foreach($search_kws as $kw) {
         $sql .= "OR bookTitle LIKE '%$kw%'";
+		$sql .= "OR bookID = (SELECT bookID FROM book_categories WHERE subjectID = (SELECT subjectID FROM book_subjects WHERE subjectName LIKE '%$kw%'))";
+		$sql .= "OR bookID = (SELECT bookID FROM book_authors WHERE authID = (SELECT authID FROM authors WHERE authName LIKE '%$kw%'))";
     }
 
 	$result = mysql_query($sql);
@@ -93,8 +94,12 @@
 				?>
 			</div>
 			<div style="text-align: center;">
+				<?php
+					if($_SESSION['logged'] == "true") {
+				?>
 					<button class="btn btn-sm btn-primary" type="submit">Add Selected to Cart</button>
 				<?php 
+					}
 					echo '<pre>';
 					print_r($_SESSION['cart']);
 					echo '</pre>';
