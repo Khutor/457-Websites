@@ -34,9 +34,11 @@
             <a class="nav-link" href="login.php">Login</a>
           </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0" action="listing.php">
-          <input class="form-control mr-sm-2" name="search" type="text" placeholder="Search"  aria-label="Search">
-          <button class="btn btn-sm btn-primary" type="submit">Search</button>
+        <form class="d-inline mx-2 w-25" action="listing.php">
+            <div class="input-group">
+                <input class="form-control border border-right-0" name="search" type="text" id="search" placeholder="Search.." aria-label="Search">
+                <button class="btn btn-sm btn-primary" type="submit">Search</button>
+            </div>
         </form>
       </div>
 </nav>
@@ -63,7 +65,7 @@
             <a class="nav-link" href="logout.php">Logout</a>
           </li>
         </ul>
-        <!-- TODO - add cart image w/ amount of contents -->
+
         <div id="carticon">
           <a href="#" style="color: #0D7FF6;">
           <span class="p1 fa-stack fa-2x has-badge hover" data-count="<?php echo $cart; ?>">
@@ -72,9 +74,11 @@
           </a>
         </div>
 
-        <form class="form-inline my-2 my-lg-0" action="listing.php">
-          <input class="form-control mr-sm-2" name="search" type="text" id="search2" placeholder="Search" aria-label="Search">
-          <button class="btn btn-sm btn-primary" type="submit">Search</button>
+        <form class="d-inline mx-2 w-25" action="listing.php">
+            <div class="input-group">
+                <input class="form-control border border-right-0" name="search" type="text" id="search2" placeholder="Search.." aria-label="Search">
+                <button class="btn btn-sm btn-primary" type="submit">Search</button>
+            </div>
         </form>
       </div>
 </nav>
