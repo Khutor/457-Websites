@@ -15,7 +15,7 @@
         $count = mysql_num_rows($result);
       
         if($count == 1) {
-            $_SESSION['login_user'] = $uName;
+            $_SESSION['userN'] = $uName;
             $_SESSION['userID'] = $row['userID'];
             $_SESSION['isAdmin'] = $row['userIsAdmin'];
             $_SESSION['logged'] = "true";

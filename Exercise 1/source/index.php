@@ -1,6 +1,6 @@
 <?php
     if(!isset($_SESSION)) { 
-        session_start();
+        session_start();	
     }
 ?>
 
@@ -24,47 +24,43 @@
     <link href="css/nav.css" rel="stylesheet">
   </head>
 
-  <body>
-    <div id="nav-div"></div>
+	<body>
+		<div id="nav-div"></div>
     
-    <main role="main" class="container">
+		<main role="main" class="container">
 
-      <div id="test1" class="starter-template">
-        <h1>Bootstrap starter template</h1>
-        <p class="lead"> no </p>
-      </div>
-      
-     <div id="test2" class="starter-template">
-        <h1>Bootstrap starter template2</h1>
-        <p class="lead"> yes </p>
-      </div>
+			<?php
+				$isAdmin = $_SESSION['isAdmin'];
+				$name = $_SESSION['userN'];
+				$id = $_SESSION['userID'];
+				$log = $_SESSION['logged'];
 
-        <?php
-            $isAdmin = $_SESSION['isAdmin'];
-            $name = $_SESSION['login_user'];
-            $id = $_SESSION['userID'];
-            $log = $_SESSION['logged'];
-            if($log == "true") {
-        ?>
-        <script type="text/javascript">$('#test1').show()</script>
-        <script type="text/javascript">$('#test2').hide()</script>
-        <?php
-            }
-            else {
-        ?>
-        <script type="text/javascript">$('#test1').hide()</script>
-        <script type="text/javascript">$('#test2').show()</script>
-        <?php
-            }
-        ?>
-
-        <h2> <?php echo $isAdmin ?> </h2>
-        <h2> <?php echo $name ?> </h2>
-        <h2> <?php echo $id ?> </h2>
-        <h2> <?php echo $_SESSION['logged'] ?> </h2>
+				if($log == "true" && $isAdmin != "1") {
+					echo"
+						<div id='user' class='starter-template'>
+							<h1>Hello, " . $name . "</h1>
+							<p class='lead'> Use the navigation bar to search for books or view your account </p>
+						</div>
+						";
+				} elseif($log == "true" && $isAdmin == "1") {
+					echo"
+						<div id='admin' class='starter-template'>
+							<h1>Hello, " . $name . "</h1>
+							<p class='lead'> Use the options below </p>
+						</div>
+						";
+				} else {
+					echo"
+						<div id='general' class='starter-template'>
+							<h1>Welcome to the bookstore!</h1>
+							<p class='lead'> Use the navigation bar to search for books or login/register</p>
+						</div>
+						";
+				}
+			?>
          
 
-    </main><!-- /.container -->
+		</main><!-- /.container -->
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
