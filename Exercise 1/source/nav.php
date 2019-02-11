@@ -102,10 +102,10 @@
             <a class="nav-link" href="manage.php?type=dataview">View Database</a>
           </li>
 		  <li class="nav-item">
-            <a class="nav-link" href="manage.php?type=addauthors">Add Authors</a>
+            <a class="nav-link" href="manage.php?type=authors">Manage Authors</a>
           </li>
 		  <li class="nav-item">
-            <a class="nav-link" href="manage.php?type=addbooks">Add Books</a>
+            <a class="nav-link" href="manage.php?type=books">Manage Books</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="logout.php">Logout</a>

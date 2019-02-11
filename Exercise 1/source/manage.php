@@ -12,6 +12,18 @@
 
     include("config.php");
     $type = $_GET['type'];
+
+	if($_SERVER['REQUEST_METHOD'] == "POST") {
+		if($type == "dataview") {
+			//Clear database
+		} elseif($type == "books") {
+			//Insert book
+		} elseif($type == "authors") {
+			//Insert authors
+		} else {
+			//Do nothing
+		}
+	}
 ?>
 
 <!doctype html>
@@ -38,7 +50,7 @@
 		<div id="nav-div"></div>
     
 		<main role="main" class="container">
-            <div class="row">
+            
 			<?php
 			    if($type == "dataview") {
                     $sql1 = "SELECT userID, userName FROM users";
@@ -48,7 +60,7 @@
                     $result2 = mysql_query($sql2);
                     $result3 = mysql_query($sql3);
                     //Users
-                    echo "<div class='col'>";
+                    echo "<div class='row'><div class='col'>";
                         echo"
 						    <table class='table table-hover'>
 							    <thead>
@@ -109,19 +121,38 @@
 					        echo "</tr>";
                     }
                     echo "  </tbody>
-						</table>";
-                    echo "</div>";
+						</table>
+						</div>";
+            
+				echo "</div>
+				<div class='row'>
+					<div class='col'></div> 
+					<div class='col'>
+						<form method='post'>
+							<button class='btn btn-sm btn-primary' type='submit'>Clear Database</button>
+						</form>
+					</div>
+					<div class='col'></div> 
+				</div>";
+				
+                } elseif($type == "authors") {	
+			?>
+
+			<form method="post">
+				<h1 class="h3 mb-3 font-weight-normal">Insert Author</h1>
+				<label for="inputName" class="sr-only">Author Name</label>
+				<input type="text" id="inputName" name="inputName" class="form-control" placeholder="Author Name..." required>
+				<button class="btn btn-sm btn-primary btn-block" type="submit">Insert</button>
+            </form>
+
+			<?php
 
                 } elseif($type == "books") {
-
-
-                } elseif($type == "authors") {
 
                 } else {
                     header("location: index.php");
                 }
 			?>
-            </div>
          
 
 		</main><!-- /.container -->
