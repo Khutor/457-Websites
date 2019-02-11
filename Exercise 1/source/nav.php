@@ -1,6 +1,7 @@
 <?php
     if(!isset($_SESSION)) { 
-        session_start(); 
+        session_start();
+        $_SESSION['logged'] == "false"; 
     }
 
 
@@ -98,13 +99,13 @@
             <a class="nav-link" href="index.php">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="manage.php?type=viewAll">View Database</a>
+            <a class="nav-link" href="manage.php?type=dataview">View Database</a>
           </li>
 		  <li class="nav-item">
-            <a class="nav-link" href="manage.php?type=newAuthors">Author Management</a>
+            <a class="nav-link" href="manage.php?type=addauthors">Add Authors</a>
           </li>
 		  <li class="nav-item">
-            <a class="nav-link" href="manage.php?type=newBooks">Book Management</a>
+            <a class="nav-link" href="manage.php?type=addbooks">Add Books</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="logout.php">Logout</a>

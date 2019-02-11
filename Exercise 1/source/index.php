@@ -39,14 +39,14 @@
 					echo"
 						<div id='user' class='starter-template'>
 							<h1>Hello, " . $name . "</h1>
-							<p class='lead'> Use the navigation bar to search for books or view your account </p>
+							<p class='lead'> Use the navigation bar to search for books, view cart or view your account </p>
 						</div>
 						";
 				} elseif($log == "true" && $isAdmin == "1") {
 					echo"
 						<div id='admin' class='starter-template'>
 							<h1>Hello, " . $name . "</h1>
-							<p class='lead'> Use the options below </p>
+							<p class='lead'> Use the navigation bar to search for books, manage authors/books, or view the database </p>
 						</div>
 						";
 				} else {
