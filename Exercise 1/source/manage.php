@@ -43,7 +43,7 @@
 			    if($type == "dataview") {
                     $sql1 = "SELECT userID, userName FROM users";
                     $sql2 = "SELECT authID, authName FROM authors";
-                    $sql3 = "SELECT bookID, bookTitle FROM books";
+                    $sql3 = "SELECT bookISBN, bookTitle FROM book";
                     $result1 = mysql_query($sql1);
                     $result2 = mysql_query($sql2);
                     $result3 = mysql_query($sql3);
@@ -96,7 +96,7 @@
 						    <table class='table table-hover'>
 							    <thead>
 								    <tr>
-									    <th scope='col'>Book ID</th>
+									    <th scope='col'>Book ISBN</th>
 									    <th scope='col'>Book Title</th>
 								    </tr>
 							    </thead>
@@ -104,8 +104,8 @@
 					        ";
                     while($row = mysql_fetch_array($result3)) {
                             echo "<tr>";
-                        		    echo "<td>" .  $row['bookID'] . "</td>";
-							        echo "<td> <a href=details.php?id=" . $row['bookID'] . "&type=book>" . $row['bookTitle'] . "</a></td>";
+                        		    echo "<td>" .  $row['bookISBN'] . "</td>";
+							        echo "<td> <a href=details.php?ISBN=" . $row['bookISBN'] . "&type=book>" . $row['bookTitle'] . "</a></td>";
 					        echo "</tr>";
                     }
                     echo "  </tbody>

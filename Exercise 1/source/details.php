@@ -6,7 +6,7 @@
 	include("config.php");
 	$type = $_GET['type'];
 	if($type == "book") {
-		$sql = "SELECT * FROM books WHERE bookID = " . $_GET['id'];
+		$sql = "SELECT * FROM book WHERE bookISBN = " . $_GET['ISBN'];
 		$result = mysql_query($sql);
 	} elseif($type == "author") {
 		$sql = "SELECT * FROM authors WHERE authID = " . $_GET['id'];

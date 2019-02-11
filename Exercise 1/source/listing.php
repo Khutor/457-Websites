@@ -17,11 +17,11 @@
 		$search_kws = "";
 	}
 
-	$sql = "SELECT * FROM books WHERE bookTitle LIKE '%$search%' OR bookISBN LIKE '%$search%'";
+	$sql = "SELECT * FROM book WHERE bookTitle LIKE '%$search%' OR bookISBN LIKE '%$search%'";
     foreach($search_kws as $kw) {
         $sql .= "OR bookTitle LIKE '%$kw%'";
-		$sql .= "OR bookID = (SELECT bookID FROM book_categories WHERE subjectID = (SELECT subjectID FROM book_subjects WHERE subjectName LIKE '%$kw%'))";
-		$sql .= "OR bookID = (SELECT bookID FROM book_authors WHERE authID = (SELECT authID FROM authors WHERE authName LIKE '%$kw%'))";
+		$sql .= "OR bookISBN = (SELECT bookISBN FROM book_categories WHERE subjectID = (SELECT subjectID FROM book_subjects WHERE subjectName LIKE '%$kw%'))";
+		$sql .= "OR bookISBN = (SELECT bookISBN FROM book_authors WHERE authID = (SELECT authID FROM authors WHERE authName LIKE '%$kw%'))";
     }
 
 	$result = mysql_query($sql);
@@ -81,9 +81,9 @@
 						";
 						while($row = mysql_fetch_array($result)) {
 							echo "<tr>";
-									echo "<td> <input type='checkbox' name='selected_books[]' value='" . $row['bookID'] . "'/></td>";
+									echo "<td> <input type='checkbox' name='selected_books[]' value='" . $row['bookISBN'] . "'/></td>";
 									echo "<td> <input type='number' min='0' value='0' name='quantity[]' style='width: 30px;' /></td>"; 
-									echo "<td> <a href=details.php?id=" . $row['bookID'] . "&type=book>" . $row['bookTitle'] . "</a></td>";
+									echo "<td> <a href=details.php?ISBN=" . $row['bookISBN'] . "&type=book>" . $row['bookTitle'] . "</a></td>";
 									echo "<td>$" .  $row['bookCost'] . "</td>";
 							echo "</tr>";
 						}
