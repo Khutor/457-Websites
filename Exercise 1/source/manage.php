@@ -13,6 +13,11 @@
     include("config.php");
     $type = $_GET['type'];
 
+	if($type == "books") {
+		$sql = "SELECT authID, authName FROM authors";
+		$result = mysql_query($sql);
+	}
+
 	if($_SERVER['REQUEST_METHOD'] == "POST") {
 		if($type == "dataview") {
 			//Clear database
@@ -34,19 +39,23 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../../../favicon.ico">
-    <title>Index</title>
+    <title>Data Management</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
     <!-- Custom styles for this template -->
     <link href="css/starter-template.css" rel="stylesheet">
     <link href="css/nav.css" rel="stylesheet">
+	<link href="css/manage.css" rel="stylesheet">
+
+
   </head>
 
 	<body>
+
 		<div id="nav-div"></div>
     
 		<main role="main" class="container">
@@ -129,7 +138,7 @@
 					<div class='col'></div> 
 					<div class='col'>
 						<form method='post'>
-							<button class='btn btn-sm btn-primary' type='submit'>Clear Database</button>
+							<button class='btn btn-lg btn-primary btn-block' type='submit'>Clear Database</button>
 						</form>
 					</div>
 					<div class='col'></div> 
@@ -138,17 +147,36 @@
                 } elseif($type == "authors") {	
 			?>
 
-			<form method="post">
+			<form class="form-insert" method="post">
 				<h1 class="h3 mb-3 font-weight-normal">Insert Author</h1>
 				<label for="inputName" class="sr-only">Author Name</label>
 				<input type="text" id="inputName" name="inputName" class="form-control" placeholder="Author Name..." required>
-				<button class="btn btn-sm btn-primary btn-block" type="submit">Insert</button>
+				<br/ >
+				<button class="btn btn-lg btn-primary btn-block" type="submit">Insert</button>
             </form>
 
 			<?php
 
                 } elseif($type == "books") {
+			?>
+			<form class="form-insert" method="post">
+				<h1 class="h3 mb-3 font-weight-normal">Insert Book</h1>
+				<label for="inputISBN" class="sr-only" text="Ye">Book ISBN</label>
+				<input type="text" id="inputISBN" name="inputISBN" class="form-control" placeholder="ISBN..." required>
+				<label for="inputTitle" class="sr-only">Book Title</label>
+				<input type="text" id="inputTitle" name="inputTitle" class="form-control" placeholder="Title..." required>
+				<label for="inputAuthors" class="sr-only">Author(s)</label>
+				<select id="inputAuthors" data-placeholder="Yes" name="inputAuthors" placeholder="Yes" data-style="btn-default" class="form-control" multiple data-live-search="true">
+					<option>Mustard</option>
+					<option>Ketchup</option>
+					<option>Relish</option>
+				</select>
+				<label for="inputCost" class="sr-only">Book Cost</label>
+				<input type="number" id="inputCost" name="inputTitle" class="form-control" placeholder="Cost..." required>
+				<button class="btn btn-lg btn-primary btn-block" type="submit">Insert</button>
+            </form>
 
+			<?php
                 } else {
                     header("location: index.php");
                 }
@@ -161,13 +189,15 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
 
-    <script src="js/bootstrap.min.js"></script>
-
-    <script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script type="text/javascript">
         $(function(){
             $("#nav-div").load("nav.php");
         });
+		$('select').selectpicker();
     </script>
-
   </body>
 </html>
