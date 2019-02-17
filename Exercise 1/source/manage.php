@@ -22,9 +22,48 @@
 		if($type == "dataview") {
 			//Clear database
 		} elseif($type == "books") {
-			//Insert book
+			$subjects = $_POST['inputSubject'];
+			$subjSql = "SELECT subjectName FROM book_sujects WHERE subjectName LIKE " . $subjects;
+			if(strpos($subjects, ",")) {
+				$subjects = explode(",", $subjects);
+				foreach($subjects as $subj) {
+					$subjSql .= "OR subjectName LIKE " . $subj;
+					/*
+					$subjSql = "INSERT INTO subjects(subjectName) VALUES(" . $subj . ")";
+					if(mysql_query($subjSql)) {
+						//Inserted
+					} else {
+						$msg = "Subject could not be inserted";
+					}
+					*/
+				}
+			}
+
+			$subjResult = mysql_query($subjSql);
+			$count = mysql_num_rows($subjResult);
+			$subjects = $_POST['inputSubject'];
+			if($count > 0) {
+				if(strpos($subjects, ",")) {
+					$subjects = explode(",", $subjects);
+					while($row = mysql_fetch_array($subjResult)) {
+						foreach($subjects as $sub) {
+							if(in_array($sub, $row) {
+								//
+							}
+						}
+					}
+
+				} else {
+				
+				}
+			} else {
+			
+			}
+
+			$bkSql = "INSERT INTO book VALUES(" . $_POST['inputISBN'] . "," . $_POST['inputTitle'] . "," . $_POST['inputCost'] . ")";
+			$bkAuthSql = "INSERT INTO ";
 		} elseif($type == "authors") {
-			//Insert authors
+			//Insert auth
 		} else {
 			//Do nothing
 		}
@@ -165,21 +204,27 @@
 				<input type="text" id="inputISBN" name="inputISBN" class="form-control" placeholder="ISBN..." required>
 				<label for="inputTitle" class="sr-only">Book Title</label>
 				<input type="text" id="inputTitle" name="inputTitle" class="form-control" placeholder="Title..." required>
-				<label for="inputAuthors" class="sr-only">Author(s)</label>
-				<select id="inputAuthors" data-placeholder="Yes" name="inputAuthors" placeholder="Yes" data-style="btn-default" class="form-control" multiple data-live-search="true">
-					<option>Mustard</option>
-					<option>Ketchup</option>
-					<option>Relish</option>
+				<label for="authors" class="sr-only">Author(s)</label>
+				<select id="authors" data-placeholder="Yes" name="authors[]" placeholder="Yes" data-style="btn-default" class="form-control" multiple data-live-search="true">
+				<?php
+					while($row = mysql_fetch_array($result)) {
+						echo "<option value=" . $row['authID'] . ">" . $row['authName'] . "</option>";
+					}
+				?>
 				</select>
 				<label for="inputCost" class="sr-only">Book Cost</label>
 				<input type="number" id="inputCost" name="inputTitle" class="form-control" placeholder="Cost..." required>
+				<label for="inputSubject" class="sr-only" text="Ye">Book Subjects</label>
+				<input type="text" id="inputSubject" name="inputSubject" class="form-control" placeholder="Subject(s) (comma separated)..." required>
 				<button class="btn btn-lg btn-primary btn-block" type="submit">Insert</button>
             </form>
 
 			<?php
+
                 } else {
                     header("location: index.php");
                 }
+
 			?>
          
 
