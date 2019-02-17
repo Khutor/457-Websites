@@ -13,55 +13,77 @@
     include("config.php");
     $type = $_GET['type'];
 
-	if($type == "books") {
+    if($type == "books") {
 		$sql = "SELECT authID, authName FROM authors";
 		$result = mysql_query($sql);
 	}
 
+
 	if($_SERVER['REQUEST_METHOD'] == "POST") {
 		if($type == "dataview") {
 			//Clear database
+
+
+
 		} elseif($type == "books") {
-			$subjects = $_POST['inputSubject'];
-			$subjSql = "SELECT subjectName FROM book_sujects WHERE subjectName LIKE " . $subjects;
-			if(strpos($subjects, ",")) {
-				$subjects = explode(",", $subjects);
-				foreach($subjects as $subj) {
-					$subjSql .= "OR subjectName LIKE " . $subj;
-					/*
-					$subjSql = "INSERT INTO subjects(subjectName) VALUES(" . $subj . ")";
-					if(mysql_query($subjSql)) {
-						//Inserted
-					} else {
-						$msg = "Subject could not be inserted";
-					}
-					*/
-				}
-			}
+            //Insert book
+            $bookSql = "INSERT INTO book VALUES('" . $_POST['inputISBN'] . "', '" . $_POST['inputTitle'] . "', " . $_POST['inputCost'] . ")";            
+            if(mysql_query($bookSql)) {
+                //Insert Subject(s)
+			    $subjects = $_POST['inputSubject'];
+                //Test if subject(s) exists
+			    if(strpos($subjects, ",")) {
+				    $subjects = explode(",", $subjects);
+				    foreach($subjects as $subj) {
+					    $subjSqlChk .= "SELECT subjectName FROM book_subjects WHERE subjectName LIKE '" . $subj . "'";
+                        $subjChkResult = mysql_query($subjSqlChk);
+                        $count = mysql_num_rows($subjChkResult);
+                        if($count > 0) {
+                            //Subject exists
+                            $subjCatSql = "INSERT INTO book_categories(bookISBN, subjectID) VALUES('" . $_POST['inputISBN'] . "', (SELECT subjectID FROM book_subjects WHERE subjectName LIKE '" . $subj  . "'))";
+                            $result = mysql_query($subjCatSql) or die(mysql_error);
 
-			$subjResult = mysql_query($subjSql);
-			$count = mysql_num_rows($subjResult);
-			$subjects = $_POST['inputSubject'];
-			if($count > 0) {
-				if(strpos($subjects, ",")) {
-					$subjects = explode(",", $subjects);
-					while($row = mysql_fetch_array($subjResult)) {
-						foreach($subjects as $sub) {
-							if(in_array($sub, $row) {
-								//
-							}
-						}
-					}
+                        } else {
+                            //Subject doesn't exist
+                            $subjInsSql = "INSERT INTO book_subjects(subjectName) VALUES('" . $subj . "')";
+                            $result = mysql_query($subjInsSql) or die(mysql_error);
+                            $subjCatSql = "INSERT INTO book_categories(bookISBN, subjectID) VALUES('" . $_POST['inputISBN'] . "', (SELECT subjectID FROM book_subjects WHERE subjectName LIKE '" . $subj  . "'))";
+                            $result = mysql_query($subjCatSql) or die(mysql_error);
+                        }
+				    }
+			    } else {
+            	    $subjSqlChk = "SELECT subjectName FROM book_subjects WHERE subjectName LIKE '" . $subjects . "'";
+                    $subjChkResult = mysql_query($subjSqlChk);
+                    $count = mysql_num_rows($subjChkResult);
+                    if($count > 0) {
+                        //Subject exists
+                        $subjCatSql = "INSERT INTO book_categories(bookISBN, subjectID) VALUES('" . $_POST['inputISBN'] . "', (SELECT subjectID FROM book_subjects WHERE subjectName LIKE '" . $subjects . "'))";
+                        $result = mysql_query($subjCatSql) or die(mysql_error);
+                    } else {
+                        //Subject doesn't exist
+                        $subjInsSql = "INSERT INTO book_subjects(subjectName) VALUES('" . $subjects . "')";
+                        $result = mysql_query($subjInsSql) or die(mysql_error);
+                        $subjCatSql = "INSERT INTO book_categories(bookISBN, subjectID) VALUES('" . $_POST['inputISBN'] . "', (SELECT subjectID FROM book_subjects WHERE subjectName LIKE '" . $subjects . "'))";
+                        $result = mysql_query($subjCatSql) or die(mysql_error);
+                    }
+                }
 
-				} else {
-				
-				}
-			} else {
-			
-			}
+                //Insert book author(s)
+                $authors = $_POST['authors'];
+                $order = 1;
+                foreach($authors as $authID) {
+                    $authInsSql = "INSERT INTO book_authors(bookISBN, authID, authOrder) VALUES('" . $_POST['inputISBN'] . "', " . $authID . ", " . $order . ")";
+                    $result = mysql_query($authInsSql) or die(mysql_error);
+                    $order++; 
+                }
 
-			$bkSql = "INSERT INTO book VALUES(" . $_POST['inputISBN'] . "," . $_POST['inputTitle'] . "," . $_POST['inputCost'] . ")";
-			$bkAuthSql = "INSERT INTO ";
+                $msg = "Book added successfully";
+            } else {
+                $msg = "Book already exists";
+            }
+
+
+
 		} elseif($type == "authors") {
 			//Insert auth
 		} else {
@@ -198,8 +220,9 @@
 
                 } elseif($type == "books") {
 			?>
-			<form class="form-insert" method="post">
+			<form class="form-insert" method="POST">
 				<h1 class="h3 mb-3 font-weight-normal">Insert Book</h1>
+                <h2 class="h5 mb-3 font-weight-normal"> <?php echo $msg; ?> </h2>
 				<label for="inputISBN" class="sr-only" text="Ye">Book ISBN</label>
 				<input type="text" id="inputISBN" name="inputISBN" class="form-control" placeholder="ISBN..." required>
 				<label for="inputTitle" class="sr-only">Book Title</label>
@@ -213,14 +236,14 @@
 				?>
 				</select>
 				<label for="inputCost" class="sr-only">Book Cost</label>
-				<input type="number" id="inputCost" name="inputTitle" class="form-control" placeholder="Cost..." required>
+				<input type="number" step=".01"; id="inputCost" name="inputCost" class="form-control" placeholder="Cost..." required>
 				<label for="inputSubject" class="sr-only" text="Ye">Book Subjects</label>
 				<input type="text" id="inputSubject" name="inputSubject" class="form-control" placeholder="Subject(s) (comma separated)..." required>
+                <br/>
 				<button class="btn btn-lg btn-primary btn-block" type="submit">Insert</button>
             </form>
 
 			<?php
-
                 } else {
                     header("location: index.php");
                 }
