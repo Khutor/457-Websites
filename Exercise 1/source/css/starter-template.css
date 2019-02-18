@@ -5,3 +5,10 @@ body {
   padding: 3rem 1.5rem;
   text-align: center;
 }
+
+.orderCentered {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

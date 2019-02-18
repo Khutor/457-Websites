@@ -1,8 +1,18 @@
 <?php
     if(!isset($_SESSION)) { 
-        session_start();
+        session_start();	
     }
+    include("nav.php");
     include("config.php");
+
+    if(($_SESSION['userID'] != $_GET['id']) && ($_SESSION['isAdmin'] != "1")) {
+        header("location: index.php");
+    }
+    $sql = "SELECT * FROM users WHERE userID = " . $_GET['id'];
+    $result = mysql_query($sql);
+    $row = mysql_fetch_array($result);
+    //$sql = "SELECT book.bookTitle, order_contents.bookISBN, order_contents.bookQuantity FROM order_contentsINNER JOIN book ON book.bookISBN = '";
+    //$result2 = mysql_query($sql);
 
 ?>
 
@@ -15,41 +25,42 @@
     <meta name="author" content="">
     <link rel="icon" href="../../../../favicon.ico">
     <title>Account</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-
-    <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
+    <!-- Custom CSS -->
     <link href="css/starter-template.css" rel="stylesheet">
-  </head>
 
-  <body>
-    <div id="nav-div"></div>
+    </head>
+
+	<body>
     
-    <main role="main" class="container">
+        <main role="main" class="container">
+            <?php
+                echo "<div class='row'><div class='col'>
+		        <h5>ID: " . $row['userID'] . "</h5></div><div class='col'>
+		        <h5>Name: " . $row['userName'] . "</h5></div><div class='col'>
+		        <h5>Total Spent: $" . $row['userSpent'] . "</h5></div></div> <br/>";
+                    
+                echo "<div class='row'>";
+                echo   "<div class='col'>                       
+				        <table class='table table-hover'>
+					        <thead>
+						        <tr>
+							        <th scope='col'>ISBN</th>
+                                    <th scope='col'>Quantity</th>
+						        </tr>
+					        </thead>
+					        <tbody>";
+                while($row2 = mysql_fetch_array($result2)) {
+                        echo "<tr>";
+                                echo "<td>" . $row2['bookISBN'] . "</td>";
+                                echo "<td><a href=details.php?id=" . $row2['bookISBN'] . "&type=book>" . $row2['authName'] . "</a></td>";
+				        echo "</tr>";
+                }
+                echo "  </tbody>
+			        </table>";
+                echo "</div></div>";
+            ?>
 
-      <div id="test1" class="starter-template">
-        <h1>Bootstrap starter template</h1>
-        <p class="lead"> no </p>
-      </div>
-      
-         
-
-    </main><!-- /.container -->
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-
-    <script src="js/bootstrap.min.js"></script>
-
-    <script>
-        $(function(){
-            $("#nav-div").load("nav.php");
-        });
-    </script>
-
+        </main><!-- /.container -->
   </body>
 </html>

@@ -3,7 +3,7 @@
         session_start(); 
     }
     include("config.php");
-
+    include("nav.php");
     $msg = '';
     if($_SERVER["REQUEST_METHOD"] == "POST") {      
         $uName = $_POST['inputUName'];

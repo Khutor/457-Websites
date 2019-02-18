@@ -8,6 +8,7 @@
 	}
 
 	include("config.php");
+    include("nav.php");
 
 	if(!empty($_GET['search'])) {
 		$search = $_GET['search'];
@@ -53,12 +54,9 @@
 		<link rel="icon" href="../../../../favicon.ico">
 		<title>Book Search</title>
 
-		<!-- Bootstrap core CSS -->
-		<link href="css/bootstrap.min.css" rel="stylesheet">
-
-		<!-- Custom styles for this template -->
+		<!-- Custom CSS-->
 		<link href="css/starter-template.css" rel="stylesheet">
-		<link href="css/nav.css" rel="stylesheet">
+
 	</head>
 	<body>
 		<div id="nav-div"></div>
@@ -112,12 +110,6 @@
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
-
-		<script>
-			$(function(){
-				$("#nav-div").load("nav.php");
-			});
-		</script>
 
 	</body>
 </html>

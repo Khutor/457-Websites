@@ -2,6 +2,7 @@
     if(!isset($_SESSION)) { 
         session_start();	
     }
+    include("nav.php");
 ?>
 
 <!doctype html>
@@ -13,15 +14,10 @@
     <meta name="author" content="">
     <link rel="icon" href="../../../../favicon.ico">
     <title>Index</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-
-    <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
+    <!-- Custom CSS -->
     <link href="css/starter-template.css" rel="stylesheet">
-    <link href="css/nav.css" rel="stylesheet">
+
   </head>
 
 	<body>
@@ -61,18 +57,5 @@
          
 
 		</main><!-- /.container -->
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-
-    <script src="js/bootstrap.min.js"></script>
-
-    <script>
-        $(function(){
-            $("#nav-div").load("nav.php");
-        });
-    </script>
-
   </body>
 </html>

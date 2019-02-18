@@ -3,6 +3,7 @@
         session_start(); 
     }
     include("config.php");
+    include("nav.php");
     $msg = '';
     if($_SERVER["REQUEST_METHOD"] == "POST") {      
         $uName = $_POST['inputUName'];
@@ -26,13 +27,9 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <link rel="icon" href="../../../../favicon.ico">
-
         <title>Register</title>
 
-        <!-- Bootstrap core CSS -->
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-
-        <!-- Custom styles for this template -->
+        <!-- Custom CSS -->
         <link href="css/login.css" rel="stylesheet">
     </head>
 
@@ -55,20 +52,5 @@
             </form>
 
         </main><!-- /.container -->
-
-
-
-        <!-- Bootstrap core JavaScript
-        ================================================== -->
-        <!-- Placed at the end of the document so the pages load faster -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-
-        <script>
-            $(function(){
-                $("#nav-div").load("nav.php");
-            });
-        </script>
-
   </body>
 </html>
