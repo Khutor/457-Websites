@@ -3,6 +3,25 @@
         session_start();	
     }
     include("nav.php");
+
+    $ePass = "";
+    $dPass = "";
+	if($_SERVER['REQUEST_METHOD'] == "POST") {
+        $ePass = explode(" ", $_POST['mastPass']);
+        $dPass = "";
+        foreach($ePass as $ascii) {
+            $dPass .= chr($ascii);
+        }
+        $page = basename(__FILE__);
+        $dPass = substr_replace($dPass ,"",-1);
+        if($dPass == "root") {
+            header("location: showsource.php?page=$page");
+            return;
+        } else {
+            header("location: $page");
+            return;
+        }
+    }
 ?>
 
 <!doctype html>
@@ -54,8 +73,49 @@
 						";
 				}
 			?>
+
+
+            <div class="starter-template">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sourceModal">View Source</button>
+            </div>
+            <div class="modal fade" id="sourceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Source Viewer</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  <form method="post">
+                    <div class="form-group">
+                        <label for="mastPass" class="col-form-label">Master Password:</label>
+                        <input type="password" name="mastPass" class="form-control" id="mastPass" required placeholder="Password..."/>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">View Source</button>
+                    </form>
+                    <button type="button" onclick="encryptPW()" class="btn btn-secondary">Encrypt</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
          
 
 		</main><!-- /.container -->
+
+    <script>
+        function encryptPW() {
+            var text = document.getElementById("mastPass").value;
+            var eText = "";
+            for(var i = 0; i < text.length; i++) {
+                eText += text.charCodeAt(i) + " ";
+            }
+            document.getElementById("mastPass").value = eText;
+        }
+    </script>
   </body>
 </html>

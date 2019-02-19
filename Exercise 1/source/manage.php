@@ -20,124 +20,141 @@
 	}
 
     $msg = "";
-
-
+    $ePass = "";
+    $dPass = "";
 	if($_SERVER['REQUEST_METHOD'] == "POST") {
-		if($type == "dataview") {
-			//Clear database
-            $sql = "DELETE FROM orders; ALTER TABLE orders AUTO_INCREMENT = 1; DELETE FROM users WHERE userID > 1; ALTER TABLE users AUTO_INCREMENT = 2;";
-            $sql .= " DELETE FROM book_subjects; ALTER TABLE book_subjects AUTO_INCREMENT = 1; DELETE FROM authors; ALTER TABLE authors AUTO_INCREMENT  = 1;";
-            $sql.= " DELETE FROM order_contents; DELETE FROM book_categories; DELETE FROM book; ALTER TABLE book AUTO_INCREMENT = 1;";
-            if(mysql_multi_query($sql)) {
-                $msg = "Database Successfully cleared";
-            } else {
-                $msg = "Database could not be cleared (Reason = " . mysql_errorno() . ": " . mysql_error() . ")";
+        if(!empty($_POST['mastPass'])) {
+            $ePass = explode(" ", $_POST['mastPass']);
+            $dPass = "";
+            $page = basename(__FILE__);
+            foreach($ePass as $ascii) {
+                $dPass .= chr($ascii);
             }
+            $dPass = substr_replace($dPass ,"",-1);
+            if($dPass == "root") {
+                header("location: showsource.php?page=$page");
+                return;
+            } else {
+                header("location: $page");
+                return;
+            }
+        } else {
+		    if($type == "dataview") {
+			    //Clear database
+                $sql = "DELETE FROM orders; ALTER TABLE orders AUTO_INCREMENT = 1; DELETE FROM users WHERE userID > 1; ALTER TABLE users AUTO_INCREMENT = 2;";
+                $sql .= " DELETE FROM book_subjects; ALTER TABLE book_subjects AUTO_INCREMENT = 1; DELETE FROM authors; ALTER TABLE authors AUTO_INCREMENT  = 1;";
+                $sql.= " DELETE FROM order_contents; DELETE FROM book_categories; DELETE FROM book; ALTER TABLE book AUTO_INCREMENT = 1;";
+                if(mysql_multi_query($sql)) {
+                    $msg = "Database Successfully cleared";
+                } else {
+                    $msg = "Database could not be cleared (Reason = " . mysql_errorno() . ": " . mysql_error() . ")";
+                }
 
-		} elseif($type == "books") {
-            //Insert book
-            $bookSql = "INSERT INTO book VALUES('" . $_POST['inputISBN'] . "', '" . $_POST['inputTitle'] . "', " . $_POST['inputCost'] . ")";            
-            if(mysql_query($bookSql)) {
-                //Insert Subject(s)
-			    $subjects = $_POST['inputSubject'];
-                //Test if subject(s) exists
-			    if(strpos($subjects, ",")) {
-				    $subjects = explode(",", $subjects);
-				    foreach($subjects as $subj) {
-					    $subjSqlChk = "SELECT subjectName FROM book_subjects WHERE subjectName LIKE '" . $subj . "'";
+		    } elseif($type == "books") {
+                //Insert book
+                $bookSql = "INSERT INTO book VALUES('" . $_POST['inputISBN'] . "', '" . $_POST['inputTitle'] . "', " . $_POST['inputCost'] . ")";            
+                if(mysql_query($bookSql)) {
+                    //Insert Subject(s)
+			        $subjects = $_POST['inputSubject'];
+                    //Test if subject(s) exists
+			        if(strpos($subjects, ",")) {
+				        $subjects = explode(",", $subjects);
+				        foreach($subjects as $subj) {
+					        $subjSqlChk = "SELECT subjectName FROM book_subjects WHERE subjectName LIKE '" . $subj . "'";
+                            $subjChkResult = mysql_query($subjSqlChk);
+                            $count = mysql_num_rows($subjChkResult);
+                            if($count > 0) {
+                                //Subject exists
+                                $subjCatSql = "INSERT INTO book_categories VALUES('" . $_POST['inputISBN'] . "', (SELECT subjectID FROM book_subjects WHERE subjectName LIKE '" . $subj  . "'))";
+                                $result = mysql_query($subjCatSql) or die(mysql_error());
+
+                            } else {
+                                //Subject doesn't exist
+                                $subjInsSql = "INSERT INTO book_subjects(subjectName) VALUES('" . $subj . "')";
+                                $result = mysql_query($subjInsSql) or die(mysql_error());
+                                $subjCatSql = "INSERT INTO book_categories VALUES('" . $_POST['inputISBN'] . "', (SELECT subjectID FROM book_subjects WHERE subjectName LIKE '" . $subj  . "'))";
+                                $result = mysql_query($subjCatSql) or die(mysql_error());
+                            }
+				        }
+			        } else {
+            	        $subjSqlChk = "SELECT subjectName FROM book_subjects WHERE subjectName LIKE '" . $subjects . "'";
                         $subjChkResult = mysql_query($subjSqlChk);
                         $count = mysql_num_rows($subjChkResult);
                         if($count > 0) {
                             //Subject exists
-                            $subjCatSql = "INSERT INTO book_categories VALUES('" . $_POST['inputISBN'] . "', (SELECT subjectID FROM book_subjects WHERE subjectName LIKE '" . $subj  . "'))";
+                            $subjCatSql = "INSERT INTO book_categories VALUES('" . $_POST['inputISBN'] . "', (SELECT subjectID FROM book_subjects WHERE subjectName LIKE '" . $subjects . "'))";
                             $result = mysql_query($subjCatSql) or die(mysql_error());
-
                         } else {
                             //Subject doesn't exist
-                            $subjInsSql = "INSERT INTO book_subjects(subjectName) VALUES('" . $subj . "')";
+                            $subjInsSql = "INSERT INTO book_subjects(subjectName) VALUES('" . $subjects . "')";
                             $result = mysql_query($subjInsSql) or die(mysql_error());
-                            $subjCatSql = "INSERT INTO book_categories VALUES('" . $_POST['inputISBN'] . "', (SELECT subjectID FROM book_subjects WHERE subjectName LIKE '" . $subj  . "'))";
+                            $subjCatSql = "INSERT INTO book_categories VALUES('" . $_POST['inputISBN'] . "', (SELECT subjectID FROM book_subjects WHERE subjectName LIKE '" . $subjects . "'))";
                             $result = mysql_query($subjCatSql) or die(mysql_error());
                         }
-				    }
-			    } else {
-            	    $subjSqlChk = "SELECT subjectName FROM book_subjects WHERE subjectName LIKE '" . $subjects . "'";
-                    $subjChkResult = mysql_query($subjSqlChk);
-                    $count = mysql_num_rows($subjChkResult);
-                    if($count > 0) {
-                        //Subject exists
-                        $subjCatSql = "INSERT INTO book_categories VALUES('" . $_POST['inputISBN'] . "', (SELECT subjectID FROM book_subjects WHERE subjectName LIKE '" . $subjects . "'))";
-                        $result = mysql_query($subjCatSql) or die(mysql_error());
-                    } else {
-                        //Subject doesn't exist
-                        $subjInsSql = "INSERT INTO book_subjects(subjectName) VALUES('" . $subjects . "')";
-                        $result = mysql_query($subjInsSql) or die(mysql_error());
-                        $subjCatSql = "INSERT INTO book_categories VALUES('" . $_POST['inputISBN'] . "', (SELECT subjectID FROM book_subjects WHERE subjectName LIKE '" . $subjects . "'))";
-                        $result = mysql_query($subjCatSql) or die(mysql_error());
                     }
-                }
 
-                //Insert book author(s)
-                $authors = $_POST['authors'];
-                foreach($authors as $authID) {
-                    $authInsSql = "INSERT INTO book_authors VALUES('" . $_POST['inputISBN'] . "', " . $authID . ")";
-                    $result = mysql_query($authInsSql) or die(mysql_error());
-                }
+                    //Insert book author(s)
+                    $authors = $_POST['authors'];
+                    foreach($authors as $authID) {
+                        $authInsSql = "INSERT INTO book_authors VALUES('" . $_POST['inputISBN'] . "', " . $authID . ")";
+                        $result = mysql_query($authInsSql) or die(mysql_error());
+                    }
 
-                $msg = "Book added successfully";
-            } else {
-                $msg = "Book could not be added (Reason = " . mysql_errorno() . ": " . mysql_error() . ")";
-            }
-
-		} elseif($type == "authors") {
-			if($action != "delete") {
-                //Insert author
-                $authInsSql = "INSERT INTO authors(authName) VALUES('" . $_POST['authorName'] . "')";
-                if(mysql_query($authInsSql)) {
-                    $msg = "Author inserted successfully";
+                    $msg = "Book added successfully";
                 } else {
-                    $msg = "Author could not be added (Reason = " . mysql_errorno() . ": " . mysql_error() . ")";
+                    $msg = "Book could not be added (Reason = " . mysql_errorno() . ": " . mysql_error() . ")";
                 }
-            } else {
-                //Delete author
-                $authCountSql = "SELECT bookISBN, COUNT(authID) as `TotalAuths` FROM book_authors GROUP BY bookISBN";
-                $result = mysql_query($authCountSql);
-                $soleAuthor = "false";
-                while($row = mysql_fetch_array($result)) {
-                    if($row['TotalAuths'] == "1") {
-                        //Book has one author
-                        $getBookSql = "SELECT bookISBN FROM book_authors WHERE bookISBN = '" . $row['bookISBN'] . "' AND authID = " . $_POST['authors'][0];
-                        $result2 = mysql_query($getBookSql);
-                        $count = mysql_num_rows($result2);
-                        if($count == 1) {
-                            //Book must contain that author
-                            $soleAuthor = "true";
+
+		    } elseif($type == "authors") {
+			    if($action != "delete") {
+                    //Insert author
+                    $authInsSql = "INSERT INTO authors(authName) VALUES('" . $_POST['inputAuthor'] . "')";
+                    if(mysql_query($authInsSql)) {
+                        $msg = "Author inserted successfully";
+                    } else {
+                        $msg = "Author could not be added (Reason = " . mysql_errorno() . ": " . mysql_error() . ")";
+                    }
+                } else {
+                    //Delete author
+                    $authCountSql = "SELECT bookISBN, COUNT(authID) as `TotalAuths` FROM book_authors GROUP BY bookISBN";
+                    $result = mysql_query($authCountSql);
+                    $soleAuthor = "false";
+                    while($row = mysql_fetch_array($result)) {
+                        if($row['TotalAuths'] == "1") {
+                            //Book has one author
+                            $getBookSql = "SELECT bookISBN FROM book_authors WHERE bookISBN = '" . $row['bookISBN'] . "' AND authID = " . $_POST['authors'][0];
+                            $result2 = mysql_query($getBookSql);
+                            $count = mysql_num_rows($result2);
+                            if($count == 1) {
+                                //Book must contain that author
+                                $soleAuthor = "true";
+                            } else {
+                                //Book doesn't contain that author
+                                continue;
+                            }
                         } else {
-                            //Book doesn't contain that author
+                            //Book has multiple authors
                             continue;
                         }
+                    }
+
+                    if($soleAuthor == "false") {
+                        //Author isn't only author of any book so can be deleted
+                        $authDelSql = "DELETE FROM authors WHERE authID = " . $_POST['authors'][0];
+                        if(mysql_query($authDelSql)) {
+                            $msg = "Author removed successfully";
+                        } else {
+                            $msg = "Author could not be removed (Reason = " . mysql_errorno() . ": " . mysql_error() . ")";
+                        }    
                     } else {
-                        //Book has multiple authors
-                        continue;
+                        $msg = "Author is the only author of at least one book";
+
                     }
                 }
-
-                if($soleAuthor == "false") {
-                    //Author isn't only author of any book so can be deleted
-                    $authDelSql = "DELETE FROM authors WHERE authID = " . $_POST['authors'][0];
-                    if(mysql_query($authDelSql)) {
-                        $msg = "Author removed successfully";
-                    } else {
-                        $msg = "Author could not be removed (Reason = " . mysql_errorno() . ": " . mysql_error() . ")";
-                    }    
-                } else {
-                    $msg = "Author is the only author of at least one book";
-
-                }
-            }
-		} else {
-			header("location: index.php");
-		}
+		    } else {
+			    header("location: index.php");
+		    }
+        }
 	}
 ?>
 
@@ -314,10 +331,48 @@
 
 			?>
          
+            <div class="starter-template">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sourceModal">View Source</button>
+            </div>
+            <div class="modal fade" id="sourceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Source Viewer</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  <form method="post">
+                    <div class="form-group">
+                        <label for="mastPass" class="col-form-label">Master Password:</label>
+                        <input type="password" name="mastPass" class="form-control" id="mastPass" required placeholder="Password..."/>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">View Source</button>
+                    </form>
+                    <button type="button" onclick="encryptPW()" class="btn btn-secondary">Encrypt</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
 
 		</main><!-- /.container -->
 
         <!-- Core Scripts for page -->
-
+        <script>
+            function encryptPW() {
+                var text = document.getElementById("mastPass").value;
+                var eText = "";
+                for(var i = 0; i < text.length; i++) {
+                    eText += text.charCodeAt(i) + " ";
+                }
+                document.getElementById("mastPass").value = eText;
+            }
+        </script>
     </body>
 </html>

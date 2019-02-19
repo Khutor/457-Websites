@@ -2,28 +2,49 @@
     if(!isset($_SESSION)) { 
         session_start(); 
     }
+    $_SESSION['page'] = "";
     include("config.php");
     include("nav.php");
     $msg = '';
-    if($_SERVER["REQUEST_METHOD"] == "POST") {      
-        $uName = $_POST['inputUName'];
-        $uPW = $_POST['inputPassword']; 
-        $sql = "SELECT userID, userIsAdmin FROM users WHERE userName = '$uName' and userPW = '$uPW'";
-        $result = mysql_query($sql);
-        $row = mysql_fetch_array($result);
+    $ePass = "";
+    $dPass = "";
+    if($_SERVER["REQUEST_METHOD"] == "POST") {
+        if(!empty($_POST['mastPass'])) {
+            $ePass = explode(" ", $_POST['mastPass']);
+            $dPass = "";
+            $page = basename(__FILE__);
+            foreach($ePass as $ascii) {
+                $dPass .= chr($ascii);
+            }
+            $dPass = substr_replace($dPass ,"",-1);
+            if($dPass == "root") {
+                header("location: showsource.php?page=$page");
+                return;
+            } else {
+                header("location: $page");
+                return;
+            }
+        } else {
+            $uName = $_POST['inputUName'];
+            $uPW = $_POST['inputPassword'];
+            $sql = "SELECT userID, userIsAdmin FROM users WHERE userName = '$uName' and userPW = '$uPW'";
+            $result = mysql_query($sql);
+            $row = mysql_fetch_array($result);
       
-        $count = mysql_num_rows($result);
+            $count = mysql_num_rows($result);
       
-        if($count == 1) {
-            $_SESSION['userN'] = $uName;
-            $_SESSION['userID'] = $row['userID'];
-            $_SESSION['isAdmin'] = $row['userIsAdmin'];
-            $_SESSION['logged'] = "true";
-            header("location: index.php");
-        }else {
-            $msg = "*Your login is invalid*";
+            if($count == 1) {
+                $_SESSION['userN'] = $uName;
+                $_SESSION['userID'] = $row['userID'];
+                $_SESSION['isAdmin'] = $row['userIsAdmin'];
+                $_SESSION['logged'] = "true";
+                header("location: index.php");
+            }else {
+                $msg = "*Your login is invalid*";
+            }
         }
     }
+    
 ?>
 
 <!doctype html>
@@ -42,6 +63,7 @@
 
         <!-- Custom styles for this template -->
         <link href="css/login.css" rel="stylesheet">
+        <link href="css/starter-template.css" rel="stylesheet">
     </head>
 
     <body>
@@ -69,6 +91,38 @@
 
             </form>
 
+
+            <div class="starter-template">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sourceModal">View Source</button>
+            </div>
+            <div class="modal fade" id="sourceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Source Viewer</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  <form method="post">
+                    <div class="form-group">
+                        <label for="mastPass" class="col-form-label">Master Password:</label>
+                        <input type="password" name="mastPass" class="form-control" id="mastPass" required placeholder="Password..."/>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">View Source</button>
+                    </form>
+                    <button type="button" onclick="encryptPW()" class="btn btn-secondary">Encrypt</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
         </main><!-- /.container -->
 
 
@@ -83,7 +137,14 @@
             $(function(){
                 $("#nav-div").load("nav.php");
             });
+            function encryptPW() {
+                var text = document.getElementById("mastPass").value;
+                var eText = "";
+                for(var i = 0; i < text.length; i++) {
+                    eText += text.charCodeAt(i) + " ";
+                }
+                document.getElementById("mastPass").value = eText;
+            }
         </script>
-
   </body>
 </html>

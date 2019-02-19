@@ -12,6 +12,7 @@
         $cart = count($_SESSION['cart']);
     }
 
+
 ?>
 <!doctype html>
 <html lang="en">
