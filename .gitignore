@@ -10,6 +10,9 @@
 # config
 config.php
 
+#databaseclear
+sql.txt
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

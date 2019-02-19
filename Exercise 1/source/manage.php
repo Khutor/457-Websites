@@ -17,6 +17,8 @@
     if($type == "books" || $action == "delete") {
 		$sql = "SELECT authID, authName FROM authors";
 		$result = mysql_query($sql);
+        $sql = "SELECT * FROM book_subjects";
+        $result2 = mysql_query($sql);
 	}
 
     $msg = "";
@@ -41,68 +43,45 @@
         } else {
 		    if($type == "dataview") {
 			    //Clear database
-                $sql = "DELETE FROM orders; ALTER TABLE orders AUTO_INCREMENT = 1; DELETE FROM users WHERE userID > 1; ALTER TABLE users AUTO_INCREMENT = 2;";
-                $sql .= " DELETE FROM book_subjects; ALTER TABLE book_subjects AUTO_INCREMENT = 1; DELETE FROM authors; ALTER TABLE authors AUTO_INCREMENT  = 1;";
-                $sql.= " DELETE FROM order_contents; DELETE FROM book_categories; DELETE FROM book; ALTER TABLE book AUTO_INCREMENT = 1;";
-                if(mysql_multi_query($sql)) {
-                    $msg = "Database Successfully cleared";
-                } else {
-                    $msg = "Database could not be cleared (Reason = " . mysql_errorno() . ": " . mysql_error() . ")";
+                $contents = file("sql.txt");
+                foreach($contents as $sql) {
+                    if(mysql_query($sql)) {
+                        //Done
+                    } else {
+                        break;
+                    }
                 }
-
+                $msg = "Database Successfully cleared";
 		    } elseif($type == "books") {
                 //Insert book
-                $bookSql = "INSERT INTO book VALUES('" . $_POST['inputISBN'] . "', '" . $_POST['inputTitle'] . "', " . $_POST['inputCost'] . ")";            
+                $bookSql = "INSERT INTO book VALUES('" . $_POST['inputISBN'] . "', '" . $_POST['inputTitle'] . "', " . $_POST['inputCost'] . ")";
+                $subjects = $_POST['subjects'];            
                 if(mysql_query($bookSql)) {
                     //Insert Subject(s)
-			        $subjects = $_POST['inputSubject'];
-                    //Test if subject(s) exists
-			        if(strpos($subjects, ",")) {
-				        $subjects = explode(",", $subjects);
-				        foreach($subjects as $subj) {
-					        $subjSqlChk = "SELECT subjectName FROM book_subjects WHERE subjectName LIKE '" . $subj . "'";
-                            $subjChkResult = mysql_query($subjSqlChk);
-                            $count = mysql_num_rows($subjChkResult);
-                            if($count > 0) {
-                                //Subject exists
-                                $subjCatSql = "INSERT INTO book_categories VALUES('" . $_POST['inputISBN'] . "', (SELECT subjectID FROM book_subjects WHERE subjectName LIKE '" . $subj  . "'))";
-                                $result = mysql_query($subjCatSql) or die(mysql_error());
-
-                            } else {
-                                //Subject doesn't exist
-                                $subjInsSql = "INSERT INTO book_subjects(subjectName) VALUES('" . $subj . "')";
-                                $result = mysql_query($subjInsSql) or die(mysql_error());
-                                $subjCatSql = "INSERT INTO book_categories VALUES('" . $_POST['inputISBN'] . "', (SELECT subjectID FROM book_subjects WHERE subjectName LIKE '" . $subj  . "'))";
-                                $result = mysql_query($subjCatSql) or die(mysql_error());
-                            }
-				        }
-			        } else {
-            	        $subjSqlChk = "SELECT subjectName FROM book_subjects WHERE subjectName LIKE '" . $subjects . "'";
-                        $subjChkResult = mysql_query($subjSqlChk);
-                        $count = mysql_num_rows($subjChkResult);
-                        if($count > 0) {
-                            //Subject exists
-                            $subjCatSql = "INSERT INTO book_categories VALUES('" . $_POST['inputISBN'] . "', (SELECT subjectID FROM book_subjects WHERE subjectName LIKE '" . $subjects . "'))";
-                            $result = mysql_query($subjCatSql) or die(mysql_error());
+				    foreach($subjects as $subjID) {
+                        //Subject exists
+                        $subjCatSql = "INSERT INTO book_categories VALUES('" . $_POST['inputISBN'] . "', $subjID)";
+                        if(mysql_query($subjCatSql)) {
+                            //success
                         } else {
-                            //Subject doesn't exist
-                            $subjInsSql = "INSERT INTO book_subjects(subjectName) VALUES('" . $subjects . "')";
-                            $result = mysql_query($subjInsSql) or die(mysql_error());
-                            $subjCatSql = "INSERT INTO book_categories VALUES('" . $_POST['inputISBN'] . "', (SELECT subjectID FROM book_subjects WHERE subjectName LIKE '" . $subjects . "'))";
-                            $result = mysql_query($subjCatSql) or die(mysql_error());
+                            //failure
+                            break;
                         }
-                    }
-
+                    }				      
                     //Insert book author(s)
                     $authors = $_POST['authors'];
                     foreach($authors as $authID) {
                         $authInsSql = "INSERT INTO book_authors VALUES('" . $_POST['inputISBN'] . "', " . $authID . ")";
-                        $result = mysql_query($authInsSql) or die(mysql_error());
+                        if(mysql_query($authInsSql)) {
+                            //success
+                        } else {
+                            //failure
+                            break;
+                        }
                     }
-
                     $msg = "Book added successfully";
                 } else {
-                    $msg = "Book could not be added (Reason = " . mysql_errorno() . ": " . mysql_error() . ")";
+                    $msg = "Book could not be added (Reason = " . mysql_error() . ")";
                 }
 
 		    } elseif($type == "authors") {
@@ -112,7 +91,7 @@
                     if(mysql_query($authInsSql)) {
                         $msg = "Author inserted successfully";
                     } else {
-                        $msg = "Author could not be added (Reason = " . mysql_errorno() . ": " . mysql_error() . ")";
+                        $msg = "Author could not be added (Reason = " . mysql_error() . ")";
                     }
                 } else {
                     //Delete author
@@ -144,7 +123,7 @@
                         if(mysql_query($authDelSql)) {
                             $msg = "Author removed successfully";
                         } else {
-                            $msg = "Author could not be removed (Reason = " . mysql_errorno() . ": " . mysql_error() . ")";
+                            $msg = "Author could not be removed (Reason = " . mysql_error() . ")";
                         }    
                     } else {
                         $msg = "Author is the only author of at least one book";
@@ -188,6 +167,7 @@
                     $result2 = mysql_query($sql2);
                     $result3 = mysql_query($sql3);
                     //Users
+                    echo "<h3 class='h5 mb-3 font-weight-normal' style='text-align:center;'>" . $msg . "</h3>";
                     echo "<div class='row'><div class='col'>";
                         echo"
 						    <table class='table table-hover'>
@@ -257,9 +237,9 @@
 					<div class='col'></div> 
 					<div class='col'>
 						<form method='post'>
-							<button class='btn btn-lg btn-primary btn-block' type='submit'>Clear Database</button>
-                            <h3 class='h5 mb-3 font-weight-normal'>" . $msg . "</h3>
+							<button class='btn btn-lg btn-primary btn-block' type='submit'>Clear Database</button>                           
 						</form>
+                        <br/>
 					</div>
 					<div class='col'></div> 
 				</div>";
@@ -308,6 +288,8 @@
 				<input type="text" id="inputISBN" name="inputISBN" class="form-control" placeholder="ISBN..." required>
 				<label for="inputTitle" class="sr-only">Book Title</label>
 				<input type="text" id="inputTitle" name="inputTitle" class="form-control" placeholder="Title..." required>
+                <label for="inputCost" class="sr-only">Book Cost</label>
+				<input type="number" step=".01"; id="inputCost" name="inputCost" class="form-control" placeholder="Cost..." required>
 				<label for="authors" class="sr-only">Author(s)</label>
 				<select id="insertAuthors" data-placeholder="Yes" name="authors[]" title="Choose book author(s)..." data-size="5" class="selectpicker form-control show-tick" multiple data-live-search="true">
 				<?php
@@ -316,11 +298,15 @@
 					}
 				?>
 				</select>
-				<label for="inputCost" class="sr-only">Book Cost</label>
-				<input type="number" step=".01"; id="inputCost" name="inputCost" class="form-control" placeholder="Cost..." required>
-				<label for="inputSubject" class="sr-only" text="Ye">Book Subjects</label>
-				<input type="text" id="inputSubject" name="inputSubject" class="form-control" placeholder="Subject(s) (comma separated)..." required>
-                <br/>
+                <label for="subjects" class="sr-only">Subjects(s)</label>
+				<select id="insertSubjects" data-placeholder="Yes" name="subjects[]" title="Choose book subject(s)..." data-size="5" class="selectpicker form-control show-tick" multiple data-live-search="true">
+				<?php
+					while($row = mysql_fetch_array($result2)) {
+						echo "<option value=" . $row['subjectID'] . ">" .  $row['subjectName'] . "</option>";
+					}
+				?>
+				</select>
+                <br/><br/>
 				<button class="btn btn-lg btn-primary btn-block" type="submit">Insert</button>
             </form>
 
@@ -346,14 +332,13 @@
                   <div class="modal-body">
                   <form method="post">
                     <div class="form-group">
-                        <label for="mastPass" class="col-form-label">Master Password:</label>
+                        <label for="mastPass" class="col-form-label">Master Password (root):</label>
                         <input type="password" name="mastPass" class="form-control" id="mastPass" required placeholder="Password..."/>
                     </div>
                   </div>
                   <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">View Source</button>
+                        <button type="submit" onclick="encryptPW()" class="btn btn-primary">View Source</button>
                     </form>
-                    <button type="button" onclick="encryptPW()" class="btn btn-secondary">Encrypt</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                   </div>
                 </div>

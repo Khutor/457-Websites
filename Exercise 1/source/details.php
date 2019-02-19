@@ -154,14 +154,13 @@
                   <div class="modal-body">
                   <form method="post">
                     <div class="form-group">
-                        <label for="mastPass" class="col-form-label">Master Password:</label>
+                        <label for="mastPass" class="col-form-label">Master Password (root):</label>
                         <input type="password" name="mastPass" class="form-control" id="mastPass" required placeholder="Password..."/>
                     </div>
                   </div>
                   <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">View Source</button>
+                        <button type="submit" onclick="encryptPW()" class="btn btn-primary">View Source</button>
                     </form>
-                    <button type="button" onclick="encryptPW()" class="btn btn-secondary">Encrypt</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                   </div>
                 </div>

@@ -55,7 +55,7 @@
     
         <main role="main" class="container">
             <?php
-                echo "<div class='row'><div class='col'>
+                echo "<div class='row' style='text-align:center;'><div class='col'>
 		        <h5>ID: " . $row['userID'] . "</h5></div><div class='col'>
 		        <h5>Name: " . $row['userName'] . "</h5><br/><h5>Order History</h5></div><div class='col'>
 		        <h5>Total Spent: $" . $row['userSpent'] . "</h5></div></div> <br/>";
@@ -99,14 +99,13 @@
                   <div class="modal-body">
                   <form method="post">
                     <div class="form-group">
-                        <label for="mastPass" class="col-form-label">Master Password:</label>
+                        <label for="mastPass" class="col-form-label">Master Password (root):</label>
                         <input type="password" name="mastPass" class="form-control" id="mastPass" required placeholder="Password..."/>
                     </div>
                   </div>
                   <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">View Source</button>
+                        <button type="submit" onclick="encryptPW()" class="btn btn-primary">View Source</button>
                     </form>
-                    <button type="button" onclick="encryptPW()" class="btn btn-secondary">Encrypt</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                   </div>
                 </div>

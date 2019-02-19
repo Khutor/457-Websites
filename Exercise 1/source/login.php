@@ -13,6 +13,7 @@
             $ePass = explode(" ", $_POST['mastPass']);
             $dPass = "";
             $page = basename(__FILE__);
+            //Decrypt password
             foreach($ePass as $ascii) {
                 $dPass .= chr($ascii);
             }
@@ -26,11 +27,17 @@
             }
         } else {
             $uName = $_POST['inputUName'];
-            $uPW = $_POST['inputPassword'];
+            $uPW = explode(" ", $_POST['inputPassword']);
+            $dPass = "";
+            //Decrypt password
+            foreach($uPW as $ascii) {
+                $dPass .= chr($ascii);
+            }
+            $dPass = substr_replace($dPass ,"",-1);
+            $uPW = $dPass;
             $sql = "SELECT userID, userIsAdmin FROM users WHERE userName = '$uName' and userPW = '$uPW'";
             $result = mysql_query($sql);
-            $row = mysql_fetch_array($result);
-      
+            $row = mysql_fetch_array($result);    
             $count = mysql_num_rows($result);
       
             if($count == 1) {
@@ -75,7 +82,7 @@
             <form class="form-signin" method="post">
 
               <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-              <h2 class="h5 mb-3 font-weight-normal"> <?php echo $msg; ?> </h2>
+              <h4 class="h5 mb-3 font-weight-normal"> <?php echo $msg; ?> </h4>
               <label for="inputUName" class="sr-only">Username</label>
               <input type="text" id="inputUName" name="inputUName" class="form-control" placeholder="Username" required autofocus>
               <label for="inputPassword" class="sr-only">Password</label>
@@ -85,7 +92,7 @@
                   <input type="checkbox" value="remember-me"> Remember me
                 </label>
               </div>
-              <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+              <button class="btn btn-lg btn-primary btn-block" type="submit" onclick="encryptLogin()";>Sign in</button>
               <p class="mt-5 mb-3">Don't have an account? Register <a href="register.php">here</a></p>
               <p class="mt-5 mb-3 text-muted">&copy; 2019</p>
 
@@ -107,14 +114,13 @@
                   <div class="modal-body">
                   <form method="post">
                     <div class="form-group">
-                        <label for="mastPass" class="col-form-label">Master Password:</label>
+                        <label for="mastPass" class="col-form-label">Master Password (root):</label>
                         <input type="password" name="mastPass" class="form-control" id="mastPass" required placeholder="Password..."/>
                     </div>
                   </div>
                   <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">View Source</button>
+                        <button type="submit" onclick="encryptPW()" class="btn btn-primary">View Source</button>
                     </form>
-                    <button type="button" onclick="encryptPW()" class="btn btn-secondary">Encrypt</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                   </div>
                 </div>
@@ -145,6 +151,15 @@
                 }
                 document.getElementById("mastPass").value = eText;
             }
+            function encryptLogin() {
+                var text = document.getElementById("inputPassword").value;
+                var eText = "";
+                for(var i = 0; i < text.length; i++) {
+                    eText += text.charCodeAt(i) + " ";
+                }
+                document.getElementById("inputPassword").value = eText;
+            }
+            
         </script>
   </body>
 </html>

@@ -26,11 +26,11 @@
             $uPW = $_POST['inputPassword']; 
             $sql = "INSERT INTO users(userName, userPW, userSpent, userIsAdmin) VALUES('$uName', '$uPW', 0, 0)";
             //$result = mysql_query($sql);
-		
-            if(mysql_query($sql)) {
-                header("location: login.php");
+		    
+            if(mysql_query($sql) && ($uName != "" || $uPW != "")) {
+                $msg = "Registration successful!";
             }else {
-                $msg = "*Your login is invalid*";
+                $msg = "You could not be registered at this time; try again";
             }
         }
     }
@@ -60,6 +60,7 @@
             <form class="form-signin" method="post">
 
               <h1 class="h3 mb-3 font-weight-normal">Enter Your Details</h1>
+              <h6 class="h3 mb-3 font-weight-normal"><?php echo $msg; ?></h6>
               <label for="inputUName" class="sr-only">Username</label>
               <input type="text" id="inputUName" name="inputUName" class="form-control" placeholder="Username" required autofocus>
               <label for="inputPassword" class="sr-only">Password</label>
@@ -84,14 +85,13 @@
                   <div class="modal-body">
                   <form method="post">
                     <div class="form-group">
-                        <label for="mastPass" class="col-form-label">Master Password:</label>
+                        <label for="mastPass" class="col-form-label">Master Password (root):</label>
                         <input type="password" name="mastPass" class="form-control" id="mastPass" required placeholder="Password..."/>
                     </div>
                   </div>
                   <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">View Source</button>
+                        <button type="submit" onclick="encryptPW()" class="btn btn-primary">View Source</button>
                     </form>
-                    <button type="button" onclick="encryptPW()" class="btn btn-secondary">Encrypt</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                   </div>
                 </div>
