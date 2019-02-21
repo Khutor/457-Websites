@@ -72,7 +72,7 @@
                 while($row2 = mysql_fetch_array($result2)) {
                         echo "<tr>";
                                 echo "<td>" . $row2['bookISBN'] . "</a></td>";
-                                echo "<td><a href=details.php?id=" . $row2['bookISBN'] . "&type=book>" . $row2['bookTitle'] . "</a></td>";
+                                echo "<td><a href=details.php?ISBN=" . $row2['bookISBN'] . "&type=book>" . $row2['bookTitle'] . "</a></td>";
                                 echo "<td>" . $row2['bookQuantity'] . "</td>";
 				        echo "</tr>";
                 }

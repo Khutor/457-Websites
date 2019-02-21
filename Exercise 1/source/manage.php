@@ -38,13 +38,11 @@
         } else {
 		    if($type == "dataview") {
 			    //Clear database
-                $contents = file("sql.txt");
-                foreach($contents as $sql) {
-                    if(mysql_query($sql)) {
-                        //Done
-                    } else {
-                        break;
-                    }
+                $sql = "CALL ClearDatabase()";
+                if(mysql_query($sql)) {
+                    $msg = "Database has been reset";
+                } else {
+                    break;
                 }
                 $msg = "Database Successfully cleared";
 		    } elseif($type == "books") {

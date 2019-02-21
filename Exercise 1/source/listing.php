@@ -154,7 +154,7 @@
                     </div>
                   </div>
                   <div class="modal-footer">
-                        <button type="submit" onclick="encryptPW()" class="btn btn-primary">View Source</button>s
+                        <button type="submit" onclick="encryptPW()" class="btn btn-primary">View Source</button>
                     </form>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                   </div>
