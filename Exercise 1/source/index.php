@@ -1,28 +1,36 @@
 <?php
     if(!isset($_SESSION)) { 
-        session_start();
-        
-	
+        session_start();   
     }
-    include("nav.php");
 
+
+    include("nav.php");
+	function getKey() { 
+        if(isset($_GET['retrieve'])) { 
+            $_SESSION['key'] = rand(1000, 5000);
+        } 
+    } 
+	
+	if(!isset($_GET['retrieve']) || $_SESSION['logged'] == "true") {
+		//Do nothing; need public key only once
+	} else {
+		getKey();
+	}
+	
     $ePass = "";
     $dPass = "";
 	if($_SERVER['REQUEST_METHOD'] == "POST") {
-        $ePass = explode(" ", $_POST['mastPass']);
-        $dPass = "";
-        foreach($ePass as $ascii) {
-            $dPass .= chr($ascii);
-        }
-        $page = basename(__FILE__);
-        $dPass = substr_replace($dPass ,"",-1);
-        if($dPass == "root") {
-            header("location: showsource.php?page=$page");
-            return;
-        } else {
-            header("location: $page");
-            return;
-        }
+        if(!empty($_POST['mastPass']) && isset($_SESSION['key'])) {
+			$dPass = $_POST['mastPass'];	
+			$page = basename(__FILE__);
+			if($dPass == md5("root")) {
+				header("location: showsource.php?page=$page");
+				return;
+			} else {
+				header("location: $page");
+				return;
+			}
+		}
     }
 ?>
 
@@ -71,15 +79,28 @@
 						<div id='general' class='starter-template'>
 							<h1>Welcome to the bookstore!</h1>
 							<p class='lead'> Use the navigation bar to search for books or login/register</p>
+							<br/>
 						</div>
 						";
 				}
 			?>
 
-
             <div class="starter-template">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sourceModal">View Source</button>
+				<br/><br/>
+				<?php
+
+					if(!isset($_SESSION['key'])) {
+				?>
+				<form method="get">
+					<input type="submit" class="btn btn-primary" value="Get Public Key" name="retrieve"/> 
+				</form>
+				<br/>
+				<?php
+					}
+				?>
             </div>
+
             <div class="modal fade" id="sourceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -90,8 +111,11 @@
                     </button>
                   </div>
                   <div class="modal-body">
+
                   <form method="post">
                     <div class="form-group">
+						<label class="col-form-label">Public Key: <?php echo $_SESSION['key']; ?> </label>
+						<br/>
                         <label for="mastPass" class="col-form-label">Master Password (root):</label>
                         <input type="password" name="mastPass" class="form-control" id="mastPass" required placeholder="Password..."/>
                     </div>
@@ -107,16 +131,13 @@
          
 
 		</main><!-- /.container -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js"></script>
 
-    <script>
-        function encryptPW() {
-            var text = document.getElementById("mastPass").value;
-            var eText = "";
-            for(var i = 0; i < text.length; i++) {
-                eText += text.charCodeAt(i) + " ";
-            }
-            document.getElementById("mastPass").value = eText;
-        }
-    </script>
+		<script>
+			function encryptPW() {
+				var text = document.getElementById("mastPass").value;
+				document.getElementById("mastPass").value = CryptoJS.MD5(text);
+			}
+		</script>
   </body>
 </html>

@@ -18,20 +18,17 @@
     $ePass = "";
     $dPass = "";
     if($_SERVER['REQUEST_METHOD'] == "POST") {
-        $ePass = explode(" ", $_POST['mastPass']);
-        $dPass = "";
-        $page = basename(__FILE__);
-        foreach($ePass as $ascii) {
-            $dPass .= chr($ascii);
-        }
-        $dPass = substr_replace($dPass ,"",-1);
-        if($dPass == "root") {
-            header("location: showsource.php?page=$page");
-            return;
-        } else {
-            header("location: $page");
-            return;
-        }
+        if(!empty($_POST['mastPass']) && isset($_SESSION['key'])) {
+			$dPass = $_POST['mastPass'];	
+			$page = basename(__FILE__);
+			if($dPass == md5("root")) {
+				header("location: showsource.php?page=$page");
+				return;
+			} else {
+				header("location: $page");
+				return;
+			}
+		}
     }
 
 ?>
@@ -113,16 +110,13 @@
             </div>
 
         </main><!-- /.container -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js"></script>
 
-    <script>
-        function encryptPW() {
-            var text = document.getElementById("mastPass").value;
-            var eText = "";
-            for(var i = 0; i < text.length; i++) {
-                eText += text.charCodeAt(i) + " ";
-            }
-            document.getElementById("mastPass").value = eText;
-        }
-    </script>
+		<script>
+			function encryptPW() {
+				var text = document.getElementById("mastPass").value;
+				document.getElementById("mastPass").value = CryptoJS.MD5(text);
+			}
+		</script>
   </body>
 </html>
