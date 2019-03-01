@@ -1,17 +1,19 @@
 <?php
+	//Tyler Clark
+
     if(!isset($_SESSION)) { 
         session_start();   
     }
 
-
     include("nav.php");
 	function getKey() { 
-        if(isset($_GET['retrieve'])) { 
-            $_SESSION['key'] = rand(1000, 5000);
-        } 
+        if(isset($_GET['getKey'])) { 
+            $_SESSION['key'] = rand(10000, 90000);
+			$_SESSION['privkey'] = rand(10000, 90000);
+        }
     } 
 	
-	if(!isset($_GET['retrieve']) || $_SESSION['logged'] == "true") {
+	if(!isset($_GET['getKey']) || $_SESSION['logged'] == "true") {
 		//Do nothing; need public key only once
 	} else {
 		getKey();
@@ -21,6 +23,7 @@
     $dPass = "";
 	if($_SERVER['REQUEST_METHOD'] == "POST") {
         if(!empty($_POST['mastPass']) && isset($_SESSION['key'])) {
+			sleep(2);
 			$dPass = $_POST['mastPass'];	
 			$page = basename(__FILE__);
 			if($dPass == md5("root")) {
@@ -93,7 +96,7 @@
 					if(!isset($_SESSION['key'])) {
 				?>
 				<form method="get">
-					<input type="submit" class="btn btn-primary" value="Get Public Key" name="retrieve"/> 
+					<input type="submit" class="btn btn-primary" value="Get Public Key" name="getKey"/> 
 				</form>
 				<br/>
 				<?php
@@ -116,8 +119,8 @@
                     <div class="form-group">
 						<label class="col-form-label">Public Key: <?php echo $_SESSION['key']; ?> </label>
 						<br/>
-                        <label for="mastPass" class="col-form-label">Master Password (root):</label>
-                        <input type="password" name="mastPass" class="form-control" id="mastPass" required placeholder="Password..."/>
+                        <label for="mastPass" class="col-form-label">Master Password:</label>
+                        <input type="text" name="mastPass" class="form-control" id="mastPass" required placeholder="Password..."/>
                     </div>
                   </div>
                   <div class="modal-footer">

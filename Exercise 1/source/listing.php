@@ -1,4 +1,6 @@
 <?php
+	//Tyler Clark
+
     if(!isset($_SESSION)) { 
         session_start(); 
     }
@@ -74,7 +76,6 @@
             header("Refresh:0");
         }
 	}
-
 ?>
 
 <!doctype html>
@@ -149,7 +150,7 @@
                   <div class="modal-body">
                   <form method="post">
                     <div class="form-group">
-                        <label for="mastPass" class="col-form-label">Master Password (root):</label>
+                        <label for="mastPass" class="col-form-label">Master Password:</label>
                         <input type="password" name="mastPass" class="form-control" id="mastPass" required placeholder="Password..."/>
                     </div>
                   </div>
@@ -161,7 +162,10 @@
                 </div>
               </div>
             </div>
-    
+
+			<?php
+				mysql_close($db);
+			?>
 		</main><!-- /.container -->
 
 		<!-- Bootstrap core JavaScript

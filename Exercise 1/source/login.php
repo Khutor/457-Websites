@@ -1,4 +1,6 @@
 <?php
+	//Tyler Clark
+
     if(!isset($_SESSION)) { 
         session_start(); 
     }
@@ -43,6 +45,7 @@
             }else {
                 $msg = "*Your login is invalid*";
             }
+			mysql_close($db);
         }
     } else {
 		if($_SERVER['REQUEST_METHOD'] == "POST")
@@ -108,7 +111,7 @@
                   <div class="modal-body">
                   <form method="post">
                     <div class="form-group">
-                        <label for="mastPass" class="col-form-label">Master Password (root):</label>
+                        <label for="mastPass" class="col-form-label">Master Password:</label>
                         <input type="password" name="mastPass" class="form-control" id="mastPass" required placeholder="Password..."/>
                     </div>
                   </div>

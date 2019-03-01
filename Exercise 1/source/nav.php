@@ -1,4 +1,6 @@
 <?php
+	//Tyler Clark
+
     if(!isset($_SESSION)) { 
         session_start();
         $_SESSION['logged'] == "false"; 
@@ -42,6 +44,9 @@
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="login.php">Login</a>
+                  </li>
+				  <li class="nav-item">
+                    <a class="nav-link" href="register.php">Register</a>
                   </li>
                 </ul>
                 <form class="d-inline mx-2 w-25" action="listing.php">

@@ -1,4 +1,6 @@
 <?php
+	//Tyler Clark
+
     if(!isset($_SESSION)) { 
         session_start();	
     }
@@ -14,7 +16,6 @@
     $sql  = "SELECT order_contents.bookISBN, book.bookTitle, order_contents.bookQuantity FROM book, order_contents ";
     $sql .= "WHERE order_contents.orderID IN (SELECT orderID FROM orders WHERE userID = " . $_GET['id'] . ") AND book.bookTitle = (SELECT bookTitle FROM book WHERE bookISBN = order_contents.bookISBN)";
     $result2 = mysql_query($sql);
-
     $ePass = "";
     $dPass = "";
     if($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -96,7 +97,7 @@
                   <div class="modal-body">
                   <form method="post">
                     <div class="form-group">
-                        <label for="mastPass" class="col-form-label">Master Password (root):</label>
+                        <label for="mastPass" class="col-form-label">Master Password:</label>
                         <input type="password" name="mastPass" class="form-control" id="mastPass" required placeholder="Password..."/>
                     </div>
                   </div>
@@ -109,6 +110,9 @@
               </div>
             </div>
 
+			<?php
+				mysql_close($db);
+			?>
         </main><!-- /.container -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js"></script>
 

@@ -1,4 +1,6 @@
 <?php
+	//Tyler Clark
+
     if(!isset($_SESSION)) { 
         session_start();
 	}
@@ -153,7 +155,7 @@
             
 			<?php
 			    if($type == "dataview") {               
-                    $sql1 = "SELECT userID, userName FROM users";
+                    $sql1 = "SELECT userID, userName FROM users ORDER BY userID ASC";
                     $sql2 = "SELECT authID, authName FROM authors";
                     $sql3 = "SELECT bookISBN, bookTitle FROM book";
                     $result1 = mysql_query($sql1);
@@ -237,6 +239,7 @@
 					<div class='col'></div> 
 				</div>";
 				
+					mysql_close($db);
                 } elseif($type == "authors") {
 
 
@@ -272,6 +275,7 @@
 
             <?php
                     }
+					mysql_close($db);
                 } elseif($type == "books") {
 			?>
 			<form class="form-insert" method="POST">
@@ -304,7 +308,9 @@
             </form>
 
 			<?php
+					mysql_close($db);
                 } else {
+					mysql_close($db);
                     header("location: index.php");
                 }
 
@@ -325,7 +331,7 @@
                   <div class="modal-body">
                   <form method="post">
                     <div class="form-group">
-                        <label for="mastPass" class="col-form-label">Master Password (root):</label>
+                        <label for="mastPass" class="col-form-label">Master Password:</label>
                         <input type="password" name="mastPass" class="form-control" id="mastPass" required placeholder="Password..."/>
                     </div>
                   </div>
@@ -337,7 +343,6 @@
                 </div>
               </div>
             </div>
-
 
 		</main><!-- /.container -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js"></script>

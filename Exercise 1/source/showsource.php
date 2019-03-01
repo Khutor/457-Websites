@@ -1,7 +1,14 @@
 <?php
+	//Tyler Clark
+
     if(!isset($_SESSION)) { 
         session_start();	
     }
+
+	if(!isset($_SESSION['key'])) {
+		header("location: index.php");
+	}
+
     $page = $_GET['page'];
     $srcPage = $page;
     if($page == "manage.php")

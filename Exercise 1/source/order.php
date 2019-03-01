@@ -1,4 +1,6 @@
 <?php
+	//Tyler Clark
+
     if(!isset($_SESSION)) { 
         session_start();	
     }
@@ -19,16 +21,19 @@
 
     $cart = $_SESSION['cart'];
     $costs = array();
+	$costs2 = array();
     $temp = array();
     $sql = "SELECT * FROM book";
     $result = mysql_query($sql);
-    $orderT = "";
+    $orderT = 0.0;
     while($row = mysql_fetch_array($result)) {
         foreach($cart as $ISBN => $quant) {
             if($ISBN == $row['bookISBN']) {
                 $temp = array($ISBN => (floatval($row['bookCost']) * floatval($quant)));
-                $costs = $costs + $temp;    
-                $orderT .= (floatval($row['bookCost']) * floatval($quant));       
+                $costs = $costs + $temp;  
+				$temp = array($ISBN => (floatval($row['bookCost'])));
+				$costs2 = $costs2 + $temp;
+                $orderT += (floatval($row['bookCost']) * floatval($quant));       
             }
         }
     }
@@ -69,7 +74,7 @@
                             while($row2 = mysql_fetch_array($result2)) {
                                 if($ISBN == $row2['bookISBN']) {
                                     $updateOrderSql  = "UPDATE order_contents ";
-                                    $updateOrderSql .= "SET bookQuantity = " . ($quant + $row2['bookQuantity']) .", orderCost = " . ($quant + $row2['bookQuantity']) * ($costs[$ISBN]) . " ";
+                                    $updateOrderSql .= "SET bookQuantity = " . ($quant + $row2['bookQuantity']) .", orderCost = " . (($quant + $row2['bookQuantity']) * ($costs2[$ISBN])) . " ";
                                     $updateOrderSql .= "WHERE orderID = ". $row['orderID'] . " AND bookISBN = '" . $ISBN . "'";
                                     if(mysql_query($updateOrderSql)) {
                                         //Update order total cost
@@ -123,12 +128,16 @@
                                 $msg = "Something went wrong with your order 4 (Reason = " . mysql_error() . ")";
                             }         
                         }
-
+						//Gets the most recent orderID for the user
+						$getOrderID = "SELECT MAX(orderID) as ID FROM orders WHERE userID = " . $_SESSION['userID'];
+						$result3 = mysql_query($getOrderID);
+						$row = mysql_fetch_array($result3);
+						$maxID = $row['ID'];
+						
                         //Update order total cost
-                        $updateTotalCostSql  = "UPDATE orders ";
-                        $updateTotalCostSql .= "SET orders.orderTotal = " ;
-                        $updateTotalCostSql .= "(SELECT SUM(orderCost) FROM (SELECT * FROM order_contents) AS tmp WHERE tmp.orderID = (SELECT MAX(orderID) FROM (SELECT * FROM orders) AS tmp2 WHERE tmp2.userID = " . $_SESSION['userID'] . ")) ";
-                        $updateTotalCostSql .= "WHERE orders.userID = " . $_SESSION['userID'] . " AND orders.orderID = MAX(orders.orderID)";
+						$updateTotalCostSql  = "UPDATE orders SET orders.orderTotal = ";
+						$updateTotalCostSql .= "(SELECT SUM(orderCost) FROM (SELECT * FROM order_contents) AS tmp WHERE tmp.orderID = " . $maxID . ") ";
+						$updateTotalCostSql .= "WHERE orders.userID = " . $_SESSION['userID'] . " AND orders.orderID = " . $maxID;
                         if(mysql_query($updateTotalCostSql)) {
                             //Update total amount user spent
                             $updateUserSpentSql  = "UPDATE users ";
@@ -146,7 +155,7 @@
                             
                             }
                         } else {
-                            $msg = "Something went wrong with your order 6 (Reason = " . mysql_error() . ")";
+                            $msg2 = "Something went wrong with your order 6 (Reason = " . mysql_error() . ")";
                         }
                     } else {
                         $msg = "Something went wrong with your order 7 (Reason = " . mysql_error() . ")";
@@ -159,7 +168,8 @@
                     $_SESSION['cart'] = array();
                     $costs = array();
                     $cart = array();
-                }     
+                }
+				mysql_close($db);
             } else {
                 //User never ordered before
                 $newOrderSql = "INSERT INTO orders(userID) VALUES(" . $_SESSION['userID'] . ")";
@@ -198,7 +208,8 @@
                     }
                 } else {
                     $msg = "Something went wrong with your order 11 (Reason = " . mysql_error() . ")";
-                }            
+                }
+				mysql_close($db);
             }
         }
     }
@@ -272,7 +283,7 @@
                   <div class="modal-body">
                   <form method="post">
                     <div class="form-group">
-                        <label for="mastPass" class="col-form-label">Master Password (root):</label>
+                        <label for="mastPass" class="col-form-label">Master Password:</label>
                         <input type="password" name="mastPass" class="form-control" id="mastPass" required placeholder="Password..."/>
                     </div>
                   </div>

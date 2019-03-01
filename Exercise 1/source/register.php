@@ -1,4 +1,6 @@
 <?php
+	//Tyler Clark
+
     if(!isset($_SESSION)) { 
         session_start(); 
     }
@@ -24,8 +26,10 @@
 		    
             if(mysql_query($sql) && ($uName != "" || $uPW != "")) {
                 $msg = "Registration successful!";
+				mysql_close($db);
             }else {
                 $msg = "You could not be registered at this time; try again";
+				$mysql_close($db);
             }
         }
     }
@@ -80,7 +84,7 @@
                   <div class="modal-body">
                   <form method="post">
                     <div class="form-group">
-                        <label for="mastPass" class="col-form-label">Master Password (root):</label>
+                        <label for="mastPass" class="col-form-label">Master Password:</label>
                         <input type="password" name="mastPass" class="form-control" id="mastPass" required placeholder="Password..."/>
                     </div>
                   </div>

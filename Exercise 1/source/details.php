@@ -1,4 +1,6 @@
 <?php
+	//Tyler Clark
+
     if(!isset($_SESSION)) { 
         session_start();
     }
@@ -10,14 +12,13 @@
 
 	if($type == "book") {
         //Get book info
-		$sql = "SELECT * FROM book WHERE bookISBN = " . $_GET['ISBN'];
+		$sql = "SELECT * FROM book WHERE bookISBN = '" . $_GET['ISBN'] . "'";
 		$result = mysql_query($sql);
         $row = mysql_fetch_array($result);
         $sql = "SELECT authID, authName FROM authors WHERE authID IN (SELECT authID FROM book_authors WHERE bookISBN LIKE '" . $row['bookISBN'] . "')";
         $result2 = mysql_query($sql);
         $sql = "SELECT subjectName FROM book_subjects WHERE subjectID IN (SELECT subjectID FROM book_categories WHERE bookISBN LIKE '" . $row['bookISBN'] . "')";
         $result3 = mysql_query($sql);
-
 	} elseif($type == "author") {
         //Get author info
 		$sql = "SELECT * FROM authors WHERE authID = " . $_GET['id'];
@@ -28,7 +29,6 @@
     }  else {
 		header("location: index.php");
 	}
-
     $ePass = "";
     $dPass = "";
 	if($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -134,8 +134,6 @@
                     header("location: index.php");
                 }
 			?>
-      
-		</main><!-- /.container -->
 
             <div class="starter-template">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sourceModal">View Source</button>
@@ -152,7 +150,7 @@
                   <div class="modal-body">
                   <form method="post">
                     <div class="form-group">
-                        <label for="mastPass" class="col-form-label">Master Password (root):</label>
+                        <label for="mastPass" class="col-form-label">Master Password:</label>
                         <input type="password" name="mastPass" class="form-control" id="mastPass" required placeholder="Password..."/>
                     </div>
                   </div>
@@ -164,6 +162,11 @@
                 </div>
               </div>
             </div>
+
+			<?php
+				mysql_close($db);
+			?>
+		</main><!-- /.container -->
 
 
 		<!-- Core Scripts for page -->
