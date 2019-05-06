@@ -19,16 +19,12 @@ import android.os.AsyncTask;
 import android.widget.TextView;
 
 public class SigninActivity  extends AsyncTask<String, Void, String> {
-    private TextView statusField,roleField;
+    private TextView statusField;
     private Context context;
-    private int byGetOrPost = 0;
 
-    //flag 0 means get and 1 means post.(By default it is get.)
     public SigninActivity(Context context,TextView statusField,TextView roleField,int flag) {
         this.context = context;
         this.statusField = statusField;
-        this.roleField = roleField;
-        byGetOrPost = flag;
     }
 
     protected void onPreExecute(){
@@ -40,7 +36,7 @@ public class SigninActivity  extends AsyncTask<String, Void, String> {
             String username = arg0[0];
             String password = arg0[1];
 
-            String link="http://undcemcs02.und.edu/~tyler.w.clark/457/2/login.php";
+            String link="http://undcemcs02.und.edu/~tyler.w.clark/457/2/login_app.php";
             String data  = URLEncoder.encode("inputUName", "UTF-8") + "=" +
                     URLEncoder.encode(username, "UTF-8");
             data += "&" + URLEncoder.encode("inputPW", "UTF-8") + "=" +
