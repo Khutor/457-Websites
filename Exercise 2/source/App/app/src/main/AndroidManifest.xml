@@ -12,12 +12,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RegisterActivity"></activity>
+        <activity
+            android:name=".BookActivity"
+            android:label="Book Details"/>
+
+        <activity
+            android:name=".AccountActivity"
+            android:label="My Account"
+            android:parentActivityName=".OptionsActivity"/>
+
+        <activity
+            android:name=".ListingActivity"
+            android:label="Book Listing"
+            android:parentActivityName=".OptionsActivity" />
+
         <activity android:name=".OptionsActivity" />
-        <activity android:name=".MainActivity">
+
+        <activity android:name=".MainActivity" android:label="Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

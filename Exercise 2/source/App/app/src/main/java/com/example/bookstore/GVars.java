@@ -5,5 +5,8 @@ public enum GVars {
     public String uID;
     public String uName;
     public boolean logged = false;
+    public String bISBN;
+    public String bTitle;
+    public String bCost;
 
 }
