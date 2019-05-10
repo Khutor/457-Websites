@@ -5,8 +5,9 @@
 
     $sql = "SELECT userSpent FROM users WHERE userID = $uid";
 
-    $sql2  = "SELECT order_contents.bookISBN, book.bookTitle, order_contents.bookQuantity FROM book, order_contents ";
+    $sql2  = "SELECT order_contents.bookISBN, book.bookTitle, book.bookCost, order_contents.bookQuantity FROM book, order_contents ";
     $sql2 .= "WHERE order_contents.orderID IN (SELECT orderID FROM orders WHERE userID = $uid) AND book.bookTitle = (SELECT bookTitle FROM book WHERE bookISBN = order_contents.bookISBN)";
+    $sql2 .= "AND book.bookCost = (SELECT bookCost FROM book WHERE bookISBN = order_contents.bookISBN)";
 
     $result = mysql_query($sql);
     $row = mysql_fetch_array($result);

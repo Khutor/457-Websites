@@ -32,6 +32,7 @@ public class ListingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_listing);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         listView = findViewById(R.id.listView);
+        GVars.INSTANCE.bookGrabType = "listing";
         getJSON("http://undcemcs02.und.edu/~tyler.w.clark/457/2/listing_app.php");
     }
 
@@ -47,7 +48,7 @@ public class ListingActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
                 try {
                     loadIntoListView(s);
                 } catch (JSONException e) {
@@ -88,6 +89,7 @@ public class ListingActivity extends AppCompatActivity {
         listView.setAdapter(bAdapt);
     }
 
+
     protected void getBook(View view) {
         TextView clickedTV = (TextView) view;
         GVars.INSTANCE.bISBN = clickedTV.getTag().toString();
@@ -102,7 +104,6 @@ public class ListingActivity extends AppCompatActivity {
 
     protected boolean getCostBook() {
         View v;
-        ArrayList<String> a = new ArrayList<>();
         TextView tv;
         ListView list = findViewById(R.id.listView);
         boolean found = false;

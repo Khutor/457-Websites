@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/listLay2">
+
+    <TextView
+        android:id="@+id/layout_textview3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:layout_marginRight="5dip"
+        android:clickable="true"
+        android:onClick="getBook2"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/layout_textview4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:layout_marginLeft="5dip"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/layout_textview5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:layout_marginLeft="5dip"
+        android:visibility="invisible"
+        android:textStyle="bold"/>
+
+</LinearLayout>

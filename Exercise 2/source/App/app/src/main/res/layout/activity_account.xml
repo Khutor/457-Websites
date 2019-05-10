@@ -21,7 +21,15 @@
         android:layout_centerHorizontal="true"
         android:text="TextView" />
 
-    <requestFocus/>
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="27dp"
+        android:text="TextView" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,6 +38,7 @@
             android:id="@+id/listView2"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
+            android:paddingTop=".4in"
             android:layout_weight="1" />
 
     </LinearLayout>

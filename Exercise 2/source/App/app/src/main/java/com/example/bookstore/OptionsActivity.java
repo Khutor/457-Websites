@@ -36,6 +36,10 @@ public class OptionsActivity extends AppCompatActivity {
         return true;
     }
 
+    public void goAccount(View view) {
+        startActivity(new Intent(this, AccountActivity.class));
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {

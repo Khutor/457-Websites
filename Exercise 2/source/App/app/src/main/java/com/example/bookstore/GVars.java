@@ -8,5 +8,7 @@ public enum GVars {
     public String bISBN;
     public String bTitle;
     public String bCost;
+    public String bookGrabType;
+    public String totalSpent;
 
 }

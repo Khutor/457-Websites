@@ -47,6 +47,6 @@
         android:layout_marginStart="13dp"
         android:layout_marginTop="53dp"
         android:onClick="backToListing"
-        android:text="Back To Listing" />
+        android:text="Go Back" />
 
 </RelativeLayout>

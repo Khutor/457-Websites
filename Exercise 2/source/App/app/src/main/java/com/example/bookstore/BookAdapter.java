@@ -31,28 +31,55 @@ public class BookAdapter extends ArrayAdapter<Book> {
     @Override
     public View getView(int position, @NonNull View convertView, @NonNull ViewGroup parent) {
         View listItem = convertView;
-        if(listItem == null)
-            listItem = LayoutInflater.from(bCont).inflate(R.layout.listview_layout, parent, false);
+        if(GVars.INSTANCE.bookGrabType.equals("listing")) {
+            if (listItem == null)
+                listItem = LayoutInflater.from(bCont).inflate(R.layout.listview_layout, parent, false);
 
-        Book currBook = Books.get(position);
-        CheckBox box = listItem.findViewById(R.id.layout_checkbox);
-        box.setTag(currBook.getISBN());
+            Book currBook = Books.get(position);
+            CheckBox box = listItem.findViewById(R.id.layout_checkbox);
+            box.setTag(currBook.getISBN());
 
-        TextView title = listItem.findViewById(R.id.layout_textview1);
-        title.setText(currBook.getTitle());
-        title.setTag(currBook.getISBN());
-        title.setTextColor(ContextCompat.getColor(bCont, R.color.colorBlue));
-        title.setPaintFlags(title.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            TextView title = listItem.findViewById(R.id.layout_textview1);
+            title.setText(currBook.getTitle());
+            title.setTag(currBook.getISBN());
+            title.setTextColor(ContextCompat.getColor(bCont, R.color.colorBlue));
+            title.setPaintFlags(title.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
 
-        EditText quant = listItem.findViewById(R.id.layout_quantity);
-        quant.setTag(currBook.getISBN());
-        quant.setHint("Quantity...");
+            EditText quant = listItem.findViewById(R.id.layout_quantity);
+            quant.setTag(currBook.getISBN());
+            quant.setHint("Quantity...");
 
-        TextView cost = listItem.findViewById(R.id.layout_textview2);
-        cost.setText("$ " + currBook.getCost());
-        cost.setTag(currBook.getISBN());
+            TextView cost = listItem.findViewById(R.id.layout_textview2);
+            cost.setText("$ " + currBook.getCost());
+            cost.setTag(currBook.getISBN());
 
-        return listItem;
+            return listItem;
+        } else {
+            if (listItem == null)
+                listItem = LayoutInflater.from(bCont).inflate(R.layout.listview2_layout, parent, false);
+
+            Book currBook = Books.get(position);
+            String quantCost  = currBook.getCost();
+            String[] split = quantCost.split(" ");
+            String quantity = split[0];
+            String cost = split[1];
+
+            TextView title = listItem.findViewById(R.id.layout_textview3);
+            title.setText(currBook.getTitle());
+            title.setTag(currBook.getISBN());
+            title.setTextColor(ContextCompat.getColor(bCont, R.color.colorBlue));
+            title.setPaintFlags(title.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+            TextView quant = listItem.findViewById(R.id.layout_textview4);
+            quant.setText("Quantity: " + quantity);
+            quant.setTag(currBook.getISBN());
+
+            TextView bCost = listItem.findViewById(R.id.layout_textview5);
+            bCost.setText("$ " + cost);
+            bCost.setTag(currBook.getISBN());
+
+            return listItem;
+        }
     }
 }
